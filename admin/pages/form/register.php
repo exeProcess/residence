@@ -2,7 +2,7 @@
   $id = "";
   $returnPage = "";
   if(isset($_GET['return'])){
-    $returnPage = (isset($_GET['return']))?$_GET['return'].'.php':'index.php';
+    $returnPage = (isset($_GET['return']))?$_GET['return']:'index.php';
     $id = $_GET['id'];
   }
 ?>
