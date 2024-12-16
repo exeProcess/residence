@@ -1,8 +1,4 @@
-<?php
-    include_once "Controller/Controller.class.php";
-    include_once "Controller/Database.php";
 
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -922,7 +918,7 @@
     <script src="js/main.js"></script>
 
     <!-- jQuery Script -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script>
     (function () {
     // Fetch property types for the dropdown and properties for the listings
