@@ -90,8 +90,12 @@
       <?php
         if(isset($_GET['return'])):
       ?>
-                <a href="register.php?return=<?= urlencode($returnPage) ?>&id=<?= urlencode($id) ?>" class="text-center">Register a new membership</a>
-        <?php else:?>
+        <?php if(isset($_GET['amount'])):?>
+            <a href="register.php?return=<?= urlencode($returnPage) ?>&id=<?= urlencode($id) ?>&amount=<?= $amount?>" class="text-center">Register a new membership</a>
+          <?php else:?>
+            <a href="register.php?return=<?= urlencode($returnPage) ?>&id=<?= urlencode($id) ?>" class="text-center">Register a new membership</a>
+          <?php endif; ?>  
+            <?php else:?>
           <a href="register.php" class="text-center">Register a new membership</a>
         <?php endif;?>
       </p>

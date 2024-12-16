@@ -2,14 +2,14 @@
  // include_once "Controller/Controller.class.php";
  //    include_once "Controller/Database.php";
 // Database connection details
-$host = "localhost"; // Replace with your database host
-$username = "americar_reside_db"; // Replace with your database username
-$password = "^^esR9xd8JHO"; // Replace with your database password
-$dbname = "americar_reside_db"; // Replace with your database name
 // $host = "localhost"; // Replace with your database host
-// $username = "root"; // Replace with your database username
-// $password = ""; // Replace with your database password
-// $dbname = "american_residence"; // Replace with your database name
+// $username = "americar_reside_db"; // Replace with your database username
+// $password = "^^esR9xd8JHO"; // Replace with your database password
+// $dbname = "americar_reside_db"; // Replace with your database name
+$host = "localhost"; // Replace with your database host
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$dbname = "american_residence"; // Replace with your database name
 // Establish the database connection
 try {
     $db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -673,65 +673,7 @@ button.modal_close span:after {
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
     <script>
-        (function(){
-  var $content = $('.modal_info').detach();
-
-  $('.open_button').on('click', function(e){
-    modal.open({
-      content: $content,
-      width: 540,
-      height: 270,
-    });
-    $content.addClass('modal_content');
-    $('.modal, .modal_overlay').addClass('display');
-    $('.open_button').addClass('load');
-  });
-}());
-
-var modal = (function(){
-
-  var $close = $('<button role="button" class="modal_close" title="Close"><span></span></button>');
-  var $content = $('<div class="modal_content"/>');
-  var $modal = $('<div class="modal"/>');
-  var $window = $(window);
-
-  $modal.append($content, $close);
-
-  $close.on('click', function(e){
-    $('.modal, .modal_overlay').addClass('conceal');
-    $('.modal, .modal_overlay').removeClass('display');
-    $('.open_button').removeClass('load');
-    e.preventDefault();
-    modal.close();
-  });
-
-  return {
-    center: function(){
-      var top = Math.max($window.height() - $modal.outerHeight(), 0) / 2;
-      var left = Math.max($window.width() - $modal.outerWidth(), 0) / 2;
-      $modal.css({
-        top: top + $window.scrollTop(),
-        left: left + $window.scrollLeft(),
-      });
-    },
-    open: function(settings){
-      $content.empty().append(settings.content);
-
-      $modal.css({
-        width: settings.width || 'auto',
-        height: settings.height || 'auto'
-      }).appendTo('body');
-
-      modal.center();
-      $(window).on('resize', modal.center);
-    },
-    close: function(){
-      $content.empty();
-      $modal.detach();
-      $(window).off('resize', modal.center);
-    }
-  };
-}());
+        
     //  $(document).ready(function () {
         // Handle form submission
     //     $('#paymentForm').on('submit', function (e) {
