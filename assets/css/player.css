@@ -1,0 +1,18 @@
+.music-player{
+    color: #fff;
+    background-color: rgba(250,250,250,0.1);
+    width: 100%;
+    padding: 25px 35px;
+}
+.song-img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 8px solid #fff;
+    box-shadow: 0 10px 60px rgba(255,26,26,0.22);
+}
+
+#progress{
+    -webkit-appearance: none;
+    
+}

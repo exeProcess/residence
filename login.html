@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar Sign Up Modal with Preloader</title>
+  <style>
+    /* Navbar styling */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      background-color: #333;
+      padding: 10px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+    }
+
+    .navbar a:hover {
+      background-color: #575757;
+      border-radius: 4px;
+    }
+
+    /* Modal overlay styling */
+    .signup-modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Modal content box styling */
+    .modal-signup-content {
+      background-color: white;
+      padding: 40px;
+      border-radius: 5px;
+      width: 300px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Preloader styling inside modal */
+    .signup-preloader {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Hidden sign-up form container */
+    .sign-up-form {
+      display: none; /* Hidden by default */
+    }
+
+    /* Button styling */
+    .close-btn, .sign-up-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover, .sign-up-btn:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <a href="#">Home</a>
+  <a href="#">About</a>
+  <a href="#" onclick="openModal()">Sign Up</a> <!-- Link to open modal -->
+  <a href="#">Contact</a>
+</div>
+
+<!-- Sign Up Modal -->
+<div class="modal" id="signUpModal">
+  <!-- Modal Content -->
+  <div class="modal-content">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader"></div>
+    
+    <!-- Sign Up Form Content -->
+    <div class="sign-up-form" id="signUpForm">
+      <h2>Sign Up</h2>
+      <input type="text" placeholder="Username" id="username" required>
+      <br><br>
+      <input type="email" placeholder="Email" id="email" required>
+      <br><br>
+      <input type="password" placeholder="Password" id="password" required>
+      <br><br>
+      <input type="password" placeholder="Confirm Password" id="confirmPassword" required>
+      <br><br>
+      <button class="sign-up-btn" onclick="signUp()">Sign Up</button>
+      <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Modal & Preloader -->
+<script>
+  function openModal() {
+    document.getElementById("signUpModal").style.display = "flex"; // Show the modal
+    setTimeout(() => {
+      document.getElementById("preloader").style.display = "none"; // Hide preloader
+      document.getElementById("signUpForm").style.display = "block"; // Show sign-up form
+    }, 2000); // Delay of 2 seconds for preloader
+  }
+
+  function closeModal() {
+    document.getElementById("signUpModal").style.display = "none";
+    document.getElementById("preloader").style.display = "flex";
+    document.getElementById("signUpForm").style.display = "none";
+  }
+
+  function signUp() {
+    // Your sign-up logic here
+    alert("Sign Up button clicked");
+  }
+</script>
+
+</body>
+</html>

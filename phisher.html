@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Checkout Modal Clone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Overlay background */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Modal container */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 18px;
+        }
+
+        /* Modal header */
+        .modal-header {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #32325d;
+        }
+
+        /* Form inputs */
+        .modal form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal form input {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal form button {
+            background-color: #6772e5;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .modal form button:hover {
+            background-color: #5469d4;
+        }
+    </style>
+</head>
+<body>
+    <!-- Button to trigger modal -->
+    <button id="openModalBtn" style="margin: 50px; padding: 10px 20px; font-size: 16px; cursor: pointer;">Open Checkout Modal</button>
+
+    <!-- Modal overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <!-- Modal content -->
+        <div class="modal">
+            <button class="close-btn" id="closeModalBtn">&times;</button>
+            <div class="modal-header">Checkout</div>
+            <form>
+                <input type="text" placeholder="Card Number" />
+                <input type="text" placeholder="MM/YY" />
+                <input type="text" placeholder="CVC" />
+                <button type="button">Pay $20.00</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Open modal
+        document.getElementById('openModalBtn').addEventListener('click', function () {
+            document.getElementById('modalOverlay').style.display = 'block';
+        });
+
+        // Close modal
+        document.getElementById('closeModalBtn').addEventListener('click', function () {
+            document.getElementById('modalOverlay').style.display = 'none';
+        });
+
+        // Close modal when clicking outside of the modal content
+        document.getElementById('modalOverlay').addEventListener('click', function (event) {
+            if (event.target === document.getElementById('modalOverlay')) {
+                document.getElementById('modalOverlay').style.display = 'none';
+
+            }
+        });
+    </script>
+</body>
+</html>

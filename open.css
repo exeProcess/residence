@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Center the modal */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 400px; /* Set a fixed width for medium size */
+    max-height: 80%; /* Limit max height */
+    overflow: auto; /* Enable scroll if content is too large */
+    border-radius: 8px; /* Optional: Rounded corners */
+    text-align: center;
+}
+
+.preloader {
+    font-size: 24px;
+    color: #333;
+    margin: 20px 0;
+}
