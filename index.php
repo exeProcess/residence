@@ -1,4 +1,8 @@
+<?php
+    include_once "Controller/Controller.class.php";
+    include_once "Controller/Database.php";
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 

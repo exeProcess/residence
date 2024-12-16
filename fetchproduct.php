@@ -1,4 +1,7 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Set up database connection parameters
 $host = "localhost"; // Replace with your database host
@@ -47,3 +50,4 @@ if ($result->num_rows > 0) {
 // Close the database connection
 $conn->close();
 ?>
+
