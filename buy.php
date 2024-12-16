@@ -80,13 +80,13 @@ if (isset($_GET['id'])) {
     <title>Day 002 - Credit Card Checkout</title>
     <style>
         .left-side {
-          background: url($img[0]);
+          background: url("data:image/type;base64,<?= $img?>") no-repeat center center;
           background-position: center;
           background-size: cover;
           position: relative;
         }
         body {
-          background: url($img[0]);
+          background: url("data:image/type;base64,<?= $img?>") no-repeat center center;
           background-position: center;
           background-size: cover;
           backdrop-filter: blur(8px);

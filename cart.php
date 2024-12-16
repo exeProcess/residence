@@ -293,7 +293,7 @@ button.modal_close span:after {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto">
-                        <a href="index.php" class="nav-item nav-link">Home</a>
+                        <a href="index.php" class="nav-item nav-link active">Home</a>
                         <a href="about.php" class="nav-item nav-link">About</a>
                         <a href="property-list.php" class="nav-item nav-link">Property List</a>
                         <?php if (!isset($_SESSION['user'])): ?>
