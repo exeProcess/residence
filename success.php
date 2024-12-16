@@ -20,7 +20,8 @@ try {
 
 // Check if 'id' is provided
 if (isset($_GET['id'])) {
-    $id = intval($_GET['id']); // Ensure the ID is an integer
+    $id = intval($_GET['id']);
+     // Ensure the ID is an integer
     $table = "properties"; // Replace with your table name
     $data = [];
 
@@ -176,8 +177,8 @@ if (isset($_GET['id'])) {
         <div class="details">
             <p><strong>Transaction ID:</strong> #TX123456789</p>
             <p><strong>Property:</strong> <?= $data['name']?></p>
-            <p><strong>Amount Paid:</strong> <?= $amount_to_pay?></p>
-            <p><strong>Date:</strong> <?= date('Y-m-d)?></p>
+            <p><strong>Amount Paid:</strong> <?= $_GET['amount']?></p>
+            <p><strong>Date:</strong> <?= date('Y-m-d')?></p>
         </div>
 
         <p>What happens next?</p>
