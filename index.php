@@ -924,7 +924,7 @@
     // Fetch property types for the dropdown and properties for the listings
     function fetchData() {
         $.ajax({
-            url: './fetchproduct.php', // Replace with your PHP endpoint
+            url: 'fetchproduct.php',
             method: 'GET',
             dataType: 'json', // Assuming the response is JSON
             success: function (response) {
