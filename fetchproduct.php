@@ -25,7 +25,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch data from the database
-$sql = "SELECT * FROM properties LIMIT 6"; // Replace with your table name
+$sql = "SELECT * FROM properties"; // Replace with your table name
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
