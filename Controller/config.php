@@ -1,8 +1,8 @@
 <?php
     define('HOST','127.0.0.1');
-    define('USER','americar_reside');
-    define('KEY','LPcLYu2hVFAcWHU834gr');
-    define('DB','americar_reside');
+    define('USER','americar_reside_db');
+    define('KEY','^^esR9xd8JHO');
+    define('DB','americar_reside_db');
     // define('USER','root');
     // define('KEY', '');
     // define('DB', 'american_residence');

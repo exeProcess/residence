@@ -5,9 +5,9 @@ ini_set('display_errors', 1);
 
 // Set up database connection parameters
 $host = "127.0.0.1"; // Replace with your database host
-$username = "americar_reside"; // Replace with your database username
-$password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
-$dbname = "americar_reside"; // Replace with your database name
+$username = "americar_reside_db"; // Replace with your database username
+$password = "^^esR9xd8JHO"; // Replace with your database password
+$dbname = "americar_reside_db"; // Replace with your database name
 // $host = "localhost"; // Replace with your database host
 // $username = "root"; // Replace with your database username
 // $password = ""; // Replace with your database password
