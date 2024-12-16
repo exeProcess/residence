@@ -1,7 +1,9 @@
 <?php
-    include_once "Controller/Controller.class.php";
-    include_once "Controller/Database.php";
-
+  include_once "Controller/Controller.class.php";
+  include_once "Controller/Database.php";
+  $dbh = new Database;
+  $db = $dbh->connect();
+  $ctrl = new Controller($db);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -308,6 +310,64 @@
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4" id="property-listings">
+                        <?php
+                                $properties = $ctrl->select(12);
+                                foreach($properties as $property):
+                            ?>
+                            <a href="cart.php?id=<?= $property['id']?>"><div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="property-item rounded overflow-hidden">
+                    <!-- Carousel Section -->
+                    <div id="carousel-<?= $property['id']?>" class="carousel slide position-relative" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <!-- ${propImages.map((image, index) => `
+                                <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                    <img class="d-block w-100 img-fluid" src="data:image/jpeg;base64,${image}" alt="${property.name}">
+                                </div>
+                            `).join('')} -->
+                            <?php
+                                $imgs = explode(",",$property['image']);
+                                foreach($imgs as $index => $img):
+                                    $activeClass = ($index === 0) ? 'active' : '';
+                            ?>
+                            <div class="carousel-item <?=$activeClass?>">
+                                <img class="d-block w-100 img-fluid" src="data:image/jpeg;base64,<?= $img?>" alt="<?= htmlspecialchars($property['name'])?>">
+                            </div>
+                            <?php
+                                endforeach;
+                            ?>
+                        </div>
+                        <!-- Carousel Controls -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-<?= $property['id']?>" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-<?= $property['id']?>" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                        <!-- Transaction Type and Property Type Tags -->
+                        <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">For <?=$property['transaction_type']?></div>
+                        <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3"><?=$property['prop_type']?></div>
+                    </div>
+                    <!-- Property Details -->
+                    <div class="p-4 pb-0">
+                        <h5 class="text-primary mb-3">$<?=$property['asking_price']?></h5>
+                        <a class="d-block h5 mb-2" href="#"><?=$property['name']?></a>
+                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i><?=$property['prop_location']?></p>
+                    </div>
+                    <!-- Additional Info -->
+                    <div class="d-flex border-top">
+                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-ruler-combined text-primary me-2"></i><?= $property['space']?> sqft</small>
+                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-bed text-primary me-2"></i><?= $property['bedroom']?> Bed</small>
+                        <small class="flex-fill text-center py-2"><i class="fa fa-bath text-primary me-2"></i><?= $property['bathroom']?> Bath</small>
+                    </div>
+                </div>
+            </div></a>
+
+                    
+                            <?php
+                                endforeach;
+                            ?>
                             <!-- <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                 <div class="property-item rounded overflow-hidden">
                                     <div class="position-relative overflow-hidden">
@@ -924,97 +984,7 @@
     <!-- jQuery Script -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    (function () {
-    // Fetch property types for the dropdown and properties for the listings
-    function fetchData() {
-        $.ajax({
-            url: 'fetchproduct.php', // Replace with your PHP endpoint
-            method: 'GET',
-            dataType: 'json', // Assuming the response is JSON
-            success: function (response) {
-                console.log(response.data);
-
-                // Populate the property listings
-                populateListings(response.data);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching data:", error);
-                $('#property-listings').html('<p class="text-danger">Error loading properties.</p>');
-            }
-        });
-    }
-
-    // Populate the property listings dynamically
-    function populateListings(properties) {
-        const $listings = $('#property-listings');
-        $listings.empty(); // Clear existing listings
-
-        if (properties.length === 0) {
-            $listings.html('<p class="text-muted">No properties found.</p>');
-            return;
-        }
-        
-        properties.forEach(property => {
-            // Prepend the base64 prefix for a JPEG image
-            // const imageSrc = `data:image/jpeg;base64,${property.image}`;
-            let propImages = property.image.split(",");
-            
-            const propertyHTML = `
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-            <a href="cart.php?id=${property.id}">
-                <div class="property-item rounded overflow-hidden">
-                    <!-- Carousel Section -->
-                    <div id="carousel-${property.id}" class="carousel slide position-relative" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            ${propImages.map((image, index) => `
-                                <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                                    <img class="d-block w-100 img-fluid" src="data:image/jpeg;base64,${image}" alt="${property.name}">
-                                </div>
-                            `).join('')}
-                        </div>
-                        <!-- Carousel Controls -->
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${property.id}" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-${property.id}" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                        <!-- Transaction Type and Property Type Tags -->
-                        <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">For ${property.transaction_type}</div>
-                        <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">${property.prop_type}</div>
-                    </div>
-                    <!-- Property Details -->
-                    <div class="p-4 pb-0">
-                        <h5 class="text-primary mb-3">$${property.asking_price}</h5>
-                        <a class="d-block h5 mb-2" href="cart.php?id=${property.id}">${property.name}</a>
-                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>${property.prop_location}</p>
-                    </div>
-                    <!-- Additional Info -->
-                    <div class="d-flex border-top">
-                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-ruler-combined text-primary me-2"></i>${property.space} sqft</small>
-                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-bed text-primary me-2"></i>${property.bedroom} Bed</small>
-                        <small class="flex-fill text-center py-2"><i class="fa fa-bath text-primary me-2"></i>${property.bathroom} Bath</small>
-                    </div>
-                </div>
-                </a>
-            </div>
-
-            `;
-            $listings.append(propertyHTML);
-        });
-    }
-
-    // Event listener for dropdown change
-    $('#property-type-select').on('change', function () {
-        const selectedType = $(this).val();
-        fetchData(selectedType); // Fetch data based on the selected type
-    });
-
-    // Initial fetch
-    fetchData();
-})();
+    
 
     </script>
 </body>
