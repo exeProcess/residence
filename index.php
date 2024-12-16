@@ -918,13 +918,13 @@
     <script src="js/main.js"></script>
 
     <!-- jQuery Script -->
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     (function () {
     // Fetch property types for the dropdown and properties for the listings
     function fetchData() {
         $.ajax({
-            url: 'fetchproduct.php',
+            url: './fetchproduct.php', // Replace with your PHP endpoint
             method: 'GET',
             dataType: 'json', // Assuming the response is JSON
             success: function (response) {

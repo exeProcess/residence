@@ -26,7 +26,7 @@ try {
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Ensure the ID is an integer
     $table = "properties"; // Replace with your table name
-    $userTable = 'users';
+    // $userTable = 'users';
     $data = [];
    
     // Prepare and execute the SQL query
