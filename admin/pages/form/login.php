@@ -1,7 +1,10 @@
 <?php
+$id = "";
+$amount = "";
+$returnPage = "";
   if(isset($_GET['return'])){
     $returnPage = (isset($_GET['return']))?$_GET['return'].'.php':'index.php';
-    $id = $_GET['id'];
+    $id = (isset($_GET['id']))? $_GET['id'] : "";
     $amount = (isset($_GET['amount']))?$_GET['amount']: "";
   }
 ?>
@@ -64,7 +67,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4 tab-loading">
-            <button type="submit" class="btn btn-primary btn-block" id="login">
+            <button type="button" class="btn btn-primary btn-block" id="login">
               Sign in
             </button>
           </div>
@@ -132,39 +135,36 @@
                   let result = JSON.parse(res)
                   if(result.status == 200){
                     toastr.success('Successful login')
-                    setTimeout(() => {
-                      $("#login").html('Sign in')
-                    }, 10);
-                    // location.href = "../../../index.php"
+                    
                     if($("#prodId").val() != ""){
                       if($('#amount').val() != ""){
                         var params = {
-                          id: '<?= $id ?>',
-                          amount: '<?= $amount?>' // Escaping PHP output
+                          id: $("#prodId").val(),
+                          amount: $('#amount').val() // Escaping PHP output
                         };
 
-                        let returnPage = '<?= '../../../'.$returnPage ?>'; // Enclose PHP value in quotes
+                        let returnPage = "<?= '../../../'.$returnPage ?>"; // Enclose PHP value in quotes
                         let uri = `${returnPage}?` + $.param(params); // Build URL
                         window.location.href = uri;
                       }else{
                         var params = {
-                          id: '<?= $id ?>', // Escaping PHP output
+                          id: $("#prodId").val(), // Escaping PHP output
                         };
 
-                        let returnPage = '<?= '../../../'.$returnPage ?>'; // Enclose PHP value in quotes
+                        let returnPage = "<?= '../../../'.$returnPage ?>"; // Enclose PHP value in quotes
                         let uri = `${returnPage}?` + $.param(params); // Build URL
                         window.location.href = uri;
                       }
                     }else{
-                      window.location.href = "index.php";
+                      window.location.href = "../../../index.php";
                     }
+                  
                   }else{
                     $("#login").html('Signin')
                     toastr.error(result.text)
                   }
-                  // console.log(res);
-                  
                 }
+                  // console.log(res);
             })
   })
   

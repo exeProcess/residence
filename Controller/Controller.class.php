@@ -272,6 +272,70 @@ include_once "Database.php";
             $result['status'] = 200;
             return $result;
         } 
+        public function select_this_user($id) {
+            try {
+                // Prepare SQL query
+                $query = "SELECT 
+                            * 
+                          FROM 
+                            properties
+                          WHERE 
+                            buyer_id = :id";
+                $prep_stmt = $this->connection->prepare($query);
+        
+                // Bind parameters securely
+                $prep_stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        
+                // Execute the query
+                $prep_stmt->execute();
+        
+                // Fetch results
+                $result = $prep_stmt->fetch(PDO::FETCH_ASSOC);
+        
+                // Check if data exists
+                if ($result) {
+                    return [
+                        'status' => 200,
+                        'data' => $result
+                    ];
+                } else {
+                    return [
+                        'status' => 404,
+                        'message' => 'No properties found for this user.'
+                    ];
+                }
+            } catch (Exception $e) {
+                // Log the error and return a generic response
+                error_log("Database Query Error: " . $e->getMessage());
+                return [
+                    'status' => 500,
+                    'message' => 'An internal server error occurred.'
+                ];
+            }
+        }
+         
+        public function fetchProperties($limit, $offset) {
+            try {
+                // Prepare the SQL query to fetch properties with limit and offset
+                $query = "SELECT * FROM properties ORDER BY id DESC LIMIT :limit OFFSET :offset";
+                $stmt = $this->connection->prepare($query);
+        
+                // Bind parameters
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        
+                // Execute the query
+                $stmt->execute();
+        
+                // Fetch the results as an associative array
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (Exception $e) {
+                // Log or handle the error
+                error_log("Error fetching properties: " . $e->getMessage());
+                return [];
+            }
+        }
+        
         public function select($limit){
             $sql = "SELECT * FROM properties
                     ORDER BY id DESC
@@ -516,7 +580,6 @@ include_once "Database.php";
                 $response = [
                     "status" => 200,
                     "text" => "success",
-                    "user" => Session::get('user')
                 ];
                 echo json_encode($response);
             }
@@ -546,19 +609,19 @@ include_once "Database.php";
             }
             header("Location: ../View/index.php");
         }
-        public function validate_location(){
+        public function validate_user_purchases($id){
             $sequel = "SELECT 
                         * 
                     FROM 
                         properties 
                     WHERE 
-                        prop_location = ?";
+                        buyer_id = ?";
             $stmt = $this->connection->prepare($sequel);
-            $stmt->execute([$this->data['prop_location']]);
-            $result = $stmt->fetch();
+            $stmt->execute([$id]);
+            $result = $stmt->fetch_assoc();
             if($stmt->rowCount() > 0)
             {
-                return true;
+                return $result;
             }
         }
         public function add_event(){

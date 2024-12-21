@@ -78,7 +78,7 @@
                                     </a>
                                     <div class="dropdown-menu rounded-0 m-0" aria-labelledby="userDropdown">
                                         <!-- <a href="renewal.php" class="dropdown-item">Renewal</a> -->
-                                        <a href="404.html" class="dropdown-item">Make payment</a>
+                                        <a href="checkout.php?user_id=<?= $_SESSION['user']['id']?>" class="dropdown-item">Make payment</a>
                                         <!-- Optionally, you can include a logout link here -->
                                         <a href="logout.php" class="dropdown-item">Log out</a>
                                     </div>

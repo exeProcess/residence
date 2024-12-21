@@ -1,31 +1,30 @@
 <?php
 include_once "Controller/Controller.class.php";
 include_once "Controller/Database.php";
+    $dbh = new Database;
+    $db = $dbh->connect();
+    $ctrl = new Controller($db);
     $id = "";
     $data = [];
-    if(isset($_GET['id'])){
-        $id = $_GET['id'];
-        $dbh = new Database;
-        $db = $dbh->connect();
-        $ctrl = new Controller($db);
-        if(!$ctrl::is_logged_in()){
-            $ctrl::login_error_redirect("./admin/pages/form/login.php?return=checkout&id=" . $id);
-        }
-        
-        $data = $ctrl->select_this($id);
-    }
     if(isset($_GET['user'])){
         $user_id = $_GET['user'];
         $dbh = new Database;
         $db = $dbh->connect();
         $ctrl = new Controller($db);
         $res = $ctrl->select_this_user($user_id);
-        if(count($res) == 0){
-            var_dump($res);
-        }else{
-            $data = $res;
+
+        if ($res['status'] === 200) {
+            $data = $res['data'];
+        } elseif ($res['status'] === 404) {
+            header("Location: ./404.php");
+            exit;
+        } else {
+            echo "Error: " . $res['message'];
+            exit;
         }
     }
+    
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

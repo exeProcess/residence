@@ -1,9 +1,11 @@
 <?php
   $id = "";
+  $amount = "";
   $returnPage = "";
   if(isset($_GET['return'])){
     $returnPage = (isset($_GET['return']))?$_GET['return']:'index.php';
-    $id = $_GET['id'];
+    $id = (isset($_GET['id']))? $_GET['id'] : "";
+    $amount = (isset($_GET['amount']))?$_GET['amount']: "";
   }
 ?>
 <!DOCTYPE html>
@@ -158,13 +160,24 @@
                             }, 10);
                             // location.href = "../../../index.php"
                             if($("#prodId").val() != ""){
-                              var params = {
-                                id: '<?= $id ?>', // Escaping PHP output
-                              };
+                              if($('#amount').val() != ""){
+                                var params = {
+                                  id: $("#prodId").val(),
+                                  amount: $('#amount').val() // Escaping PHP output
+                                };
 
-                              let returnPage = '<?= $returnPage ?>'; // Enclose PHP value in quotes
-                              let uri = `../../../${returnPage}?` + $.param(params); // Build URL
-                              window.location.href = uri;
+                                let returnPage = "<?= '../../../'.$returnPage ?>"; // Enclose PHP value in quotes
+                                let uri = `${returnPage}?` + $.param(params); // Build URL
+                                window.location.href = uri;
+                              }else{
+                                var params = {
+                                  id: '<?= $id ?>', // Escaping PHP output
+                                };
+
+                                let returnPage = "<?= '../../../'.$returnPage ?>"; // Enclose PHP value in quotes
+                                let uri = `${returnPage}?` + $.param(params); // Build URL
+                                window.location.href = uri;
+                              }
                             }else{
                               window.location.href = "../../../index.php";
                             }
