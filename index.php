@@ -314,8 +314,9 @@
                                 $properties = $ctrl->select();
                                 foreach($properties as $property):
                             ?>
-                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                             <a href="cart.php?id=<?= $property['id']?>">
+                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            
                 <div class="property-item rounded overflow-hidden">
                     <!-- Carousel Section -->
                     <div id="carousel-<?= $property['id']?>" class="carousel slide position-relative" data-bs-ride="carousel">
@@ -363,9 +364,9 @@
                         <small class="flex-fill text-center py-2"><i class="fa fa-bath text-primary me-2"></i><?= $property['bathroom']?> Bath</small>
                     </div>
                 </div>
-                </a>
+                
             </div>
-
+            </a>
                     
                             <?php
                                 endforeach;
