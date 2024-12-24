@@ -76,7 +76,7 @@ if (isset($_GET['id'])) {
     ></script>
     <link rel="stylesheet" href="buy.css">
     <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
-
+    
     <title>Day 002 - Credit Card Checkout</title>
     <style>
         .left-side {
@@ -139,38 +139,17 @@ if (isset($_GET['id'])) {
         <div class="text-box">
           <h1 class="home-heading"><?= $data['name']?></h1>
           <p class="home-price"><em><?= $data['final_price']?> </em>/</p>
-          <!-- <hr class="left-hr" /> -->
-          <!-- <p class="home-desc"><em>Entire home </em>for <em>2 guest</em></p>
-          <p class="home-desc">
-            <em>Tue, July 23, 2022 </em>to <em>Thu, July 25, 2022</em>
-          </p> -->
+          
         </div>
       </div>
 
       <div class="right-side">
         <div class="receipt">
-          <h2 class="receipt-heading">Receipt Summary</h2>
+          <h2 class="receipt-heading">Billing Information</h2>
           <div>
             <table class="table">
               <tr>
                 <td>Price</td>
-                <td class="price"><?= $data['final_price']?></td>
-              </tr>
-              <tr>
-                <td>Discount</td>
-                <td class="price">0.00 USD</td>
-              </tr>
-              <tr>
-                <td>Amount to pay</td>
-                <td class="price"><?= $amount_to_pay. " USD"?></td>
-              </tr>
-              <tr>
-                <td>Subtotal</td>
-                <td class="price"><?= $data['final_price']?></td>
-              </tr>
-              
-              <tr class="total">
-                <td>Total</td>
                 <td class="price"><?= $data['final_price']?></td>
               </tr>
             </table>
@@ -178,13 +157,14 @@ if (isset($_GET['id'])) {
         </div>
 
         <div class="payment-info">
-          <h3 class="payment-heading">Payment Information</h3>
+          
           <form
             class="form-box"
             enctype="text/plain"
             method="get"
             target="_blank"
           >
+          
             <div>
               <label for="full-name">Full Name</label>
               <input
@@ -203,6 +183,47 @@ if (isset($_GET['id'])) {
                 placeholder="sample@gmail.com"
                 required
                 type="text"
+              />
+            </div>
+            <div>
+              <label for="full-name">Billing address</label>
+              <input
+                id="billing-address"
+                name="billing-address"
+                placeholder="Enter Address"
+                required
+                type="text"
+              />
+            </div>
+            
+            <div>
+              <label for="full-name">City</label>
+              <input
+                id="city"
+                name="city"
+                placeholder="city"
+                required
+                type="text"
+              />
+            </div>
+            <div>
+              <label for="cvv">State</label>
+              <input
+                id="state"
+                name="state"
+                placeholder="New York"
+                type="text"
+                required
+              />
+            </div>
+            <div>
+              <label for="cvv">Zip code</label>
+              <input
+                id="zip-code"
+                name="zip-code"
+                placeholder=""
+                type="text"
+                required
               />
             </div>
             <div>
@@ -326,7 +347,11 @@ if (isset($_GET['id'])) {
                     var params = {
                         user: '<?= $_SESSION['user']['id']?>',
                         id: '<?=$id?>',
-                        amount: amountToPay
+                        amount: amountToPay,
+                        zipCode: $("#zip-code").val(),
+                        state: $("#state").val(),
+                        city: $("#city").val(),
+                        address: $("#billing-address")
                     };
 
                 let uri = 'verify.php?' + $.param(params);

