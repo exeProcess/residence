@@ -138,7 +138,7 @@ if (isset($_GET['id'])) {
       <div class="left-side">
         <div class="text-box">
           <h1 class="home-heading"><?= $data['name']?></h1>
-          <p class="home-price"><em><?= $data['final_price']?> </em>/</p>
+          <p class="home-price"><em>$<?= $data['final_price']?> </em></p>
           
         </div>
       </div>
@@ -150,7 +150,7 @@ if (isset($_GET['id'])) {
             <table class="table">
               <tr>
                 <td>Price</td>
-                <td class="price"><?= $data['final_price']?></td>
+                <td class="price">$<?= $data['final_price']?></td>
               </tr>
             </table>
           </div>
@@ -207,6 +207,32 @@ if (isset($_GET['id'])) {
               />
             </div>
             <div>
+              <!-- <p class="expires">Expires on:</p> -->
+              <div class="card-experation">
+                <!-- <div> -->
+                  <label for="cvv">State</label>
+                  <input
+                    id="state"
+                    name="state"
+                    placeholder="New York"
+                    type="text"
+                    required
+                  />
+                <!-- </div> -->
+
+                <!-- <div> -->
+                  <label for="cvv">Zip code</label>
+                  <input
+                    id="zip-code"
+                    name="zip-code"
+                    placeholder=""
+                    type="text"
+                    required
+                  />
+                <!-- </div> -->
+              </div>
+            </div>
+            <!-- <div>
               <label for="cvv">State</label>
               <input
                 id="state"
@@ -215,8 +241,8 @@ if (isset($_GET['id'])) {
                 type="text"
                 required
               />
-            </div>
-            <div>
+            </div> -->
+            <!-- <div>
               <label for="cvv">Zip code</label>
               <input
                 id="zip-code"
@@ -225,7 +251,7 @@ if (isset($_GET['id'])) {
                 type="text"
                 required
               />
-            </div>
+            </div> -->
             <div>
             <div id="card-feedback" style="font-size: 0.9em; margin-top: 5px;"></div>
               <label for="credit-card-num"
