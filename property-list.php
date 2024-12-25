@@ -6,7 +6,7 @@ $db = $dbh->connect();
 $ctrl = new Controller($db);
 
 // Fetch initial properties
-$limit = 10; // Number of properties to load per request
+$limit = 6; // Number of properties to load per request
 $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
 $properties = $ctrl->fetchProperties($limit, $offset);
 ?>
@@ -346,7 +346,7 @@ $properties = $ctrl->fetchProperties($limit, $offset);
                                 </div>
                             </div> -->
                             <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                                <a class="btn btn-primary py-3 px-5" href="">Browse More Property</a>
+                                <a class="btn btn-primary py-3 px-5" href="" id="load-more">Browse More Property</a>
                             </div>
                         </div>
                     </div>

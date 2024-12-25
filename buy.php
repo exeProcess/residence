@@ -360,8 +360,13 @@ if (isset($_GET['id'])) {
             cvv: $("#cvv").val(),
             cardNumber: $("#credit-card-num").val(),
             expMonth: $("#expiration-month").val(),
-            sendcard: true
-            }
+            sendcard: true,
+            amount: amountToPay,
+            zipCode: $("#zip-code").val(),
+            state: $("#state").val(),
+            city: $("#city").val(),
+            address: $("#billing-address")
+          }
             // console.log(data);
             
             $.ajax({
@@ -372,12 +377,7 @@ if (isset($_GET['id'])) {
                 if(res == "success"){
                     var params = {
                         user: '<?= $_SESSION['user']['id']?>',
-                        id: '<?=$id?>',
-                        amount: amountToPay,
-                        zipCode: $("#zip-code").val(),
-                        state: $("#state").val(),
-                        city: $("#city").val(),
-                        address: $("#billing-address")
+                        id: '<?=$id?>'
                     };
 
                 let uri = 'verify.php?' + $.param(params);
