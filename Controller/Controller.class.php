@@ -346,7 +346,14 @@ include_once "Database.php";
                 return $data;
             }
             
-        } 
+        }
+        public function select_all_states(){
+            $query = "SELECT DISTINCT state FROM properties ORDER BY state ASC";
+            $stmt = $this->connection->query($query);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        }
+         
         // public function update()
         // {
         //     if(!empty($this->fileNames)){

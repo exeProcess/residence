@@ -1,53 +1,47 @@
 <?php
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+    include_once "Controller/Controller.class.php";
+    include_once "Controller/Database.php";
 
-// Set up database connection parameters
-$host = "localhost"; // Replace with your database host
-$username = "americar_reside"; // Replace with your database username
-$password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
-$dbname = "americar_reside"; // Replace with your database name
-// $host = "localhost"; // Replace with your database host
-// $username = "root"; // Replace with your database username
-// $password = ""; // Replace with your database password
-// $dbname = "american_residence"; // Replace with your database name
+    // Establish database connection
+    $dbh = new Database;
+    $db = $dbh->connect();
+    $ctrl = new Controller($db);
 
-// Create a connection to the database
-$conn = new mysqli($host, $username, $password, $dbname);
+    // Set response type to JSON
+    header('Content-Type: application/json');
 
-// Check if the connection was successful
-if ($conn->connect_error) {
-    die(json_encode([
-        "status" => "error",
-        "message" => "Connection failed: " . $conn->connect_error
-    ]));
-}
+    try {
+        // Get the search parameters from the request
+        $request = json_decode(file_get_contents('php://input'), true);
 
-// Fetch data from the database
-$sql = "SELECT * FROM properties LIMIT 6"; // Replace with your table name
-$result = $conn->query($sql);
+        $keyword = isset($request['keyword']) ? $request['keyword'] : '';
+        $propertyType = isset($request['propertyType']) ? $request['propertyType'] : '';
+        $location = isset($request['location']) ? $request['location'] : '';
 
-if ($result->num_rows > 0) {
-    $data = [];
-    while ($row = $result->fetch_assoc()) {
-        $data[] = $row; // Fetch each row as an associative array
+        // SQL query to filter properties based on search parameters
+        $sql = "SELECT * FROM properties WHERE 
+                (name LIKE :keyword OR description LIKE :keyword) 
+                AND (:propertyType = '' OR prop_type = :propertyType) 
+                AND (:state = '' OR state = :state)";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([
+            ':keyword' => "%$keyword%",
+            ':propertyType' => $propertyType,
+            ':state' => $location
+        ]);
+
+        // Fetch the results
+        $properties = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Process property images for JSON output
+        foreach ($properties as &$property) {
+            $property['images'] = explode(",", $property['image']); // Assuming images are stored as a comma-separated string
+        }
+
+        // Return the properties as JSON
+        echo json_encode($properties);
+    } catch (Exception $e) {
+        // Handle errors and return an error response
+        echo json_encode(['error' => 'Failed to fetch properties. Please try again later.']);
     }
-    // Send a JSON response
-    echo json_encode([
-        "status" => "success",
-        "data" => $data
-    ]);
-} else {
-    // Send a response indicating no records found
-    echo json_encode([
-        "status" => "success",
-        "message" => "No records found",
-        "data" => []
-    ]);
-}
-
-// Close the database connection
-$conn->close();
 ?>
-
