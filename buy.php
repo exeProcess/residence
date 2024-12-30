@@ -349,7 +349,7 @@ if (isset($_GET['id'])) {
                 confirmButtonText: "Ok"
             });
         }else{
-            let amountToPay = <?= $amount_to_pay?>
+            let amountToPay = "<?= $amount_to_pay?>"
             let data = {
             expYear: $("#expiration-year").val(),
             email: $("#email").val(),
