@@ -1,11 +1,5 @@
 <?php
-// Load Composer's autoloader (if using Composer)
-require 'vendor/autoload.php';
 
-// Import PHPMailer classes into the global namespace
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
 
 
 
