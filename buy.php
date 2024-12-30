@@ -161,9 +161,6 @@ if (isset($_GET['id'])) {
           
           <form
             class="form-box"
-            enctype="text/plain"
-            method="get"
-            target="_blank"
           >
           
             <div>
@@ -177,7 +174,7 @@ if (isset($_GET['id'])) {
               />
             </div>
             <div>
-              <label for="full-name">Email</label>
+              <label for="email">Email</label>
               <input
                 id="email"
                 name="email"
@@ -187,7 +184,7 @@ if (isset($_GET['id'])) {
               />
             </div>
             <div>
-              <label for="full-name">Billing address</label>
+              <label for="billing-address">Billing address</label>
               <input
                 id="billing-address"
                 name="billing-address"
@@ -198,7 +195,7 @@ if (isset($_GET['id'])) {
             </div>
             
             <div>
-              <label for="full-name">City</label>
+              <label for="city">City</label>
               <input
                 id="city"
                 name="city"
@@ -211,7 +208,7 @@ if (isset($_GET['id'])) {
               <!-- <p class="expires">Expires on:</p> -->
               <div class="card-experation">
                 <!-- <div> -->
-                  <label for="cvv">State</label>
+                  <label for="state">State</label>
                   <input
                     id="state"
                     name="state"
@@ -222,7 +219,7 @@ if (isset($_GET['id'])) {
                 <!-- </div> -->
 
                 <!-- <div> -->
-                  <label for="cvv">Zip code</label>
+                  <label for="zip-code">Zip code</label>
                   <input
                     id="zip-code"
                     name="zip-code"
