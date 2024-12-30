@@ -2,6 +2,24 @@
     include_once "Controller.class.php";
     include_once "Database.php";
     
+    if(isset($_GET['offset'])) {
+        $dbh = new Database;
+        $db = $dbh->connect();
+        $ctrl = new Controller($db);
+    
+        // Fetch properties
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
+        $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+        $properties = $ctrl->fetchProperties($limit, $offset);
+        foreach ($properties as &$property) {
+            $property['images'] = explode(",", $property['image']); // Assuming images are stored as a comma-separated string
+        }
+        // Output as JSON
+        header('Content-Type: application/json');
+        echo json_encode($properties);
+        exit;
+    }
+    
     if(isset($_POST['post_product']))
     {
         $dbClass = new Database();

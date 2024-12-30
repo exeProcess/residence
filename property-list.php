@@ -8,7 +8,6 @@ $ctrl = new Controller($db);
 // Fetch initial properties
 $limit = 6; // Number of properties to load per request
 $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-$properties = $ctrl->fetchProperties($limit, $offset);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,28 +133,33 @@ $properties = $ctrl->fetchProperties($limit, $offset);
                     <div class="col-md-10">
                         <div class="row g-2">
                             <div class="col-md-4">
-                                <input type="text" class="form-control border-0 py-3" placeholder="Search Keyword">
+                                <input type="text" class="form-control border-0 py-3" placeholder="Search Keyword" id="keyword">
                             </div>
                             <div class="col-md-4">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Property Type</option>
-                                    <option value="1">Property Type 1</option>
-                                    <option value="2">Property Type 2</option>
-                                    <option value="3">Property Type 3</option>
+                                <select class="form-select border-0 py-3" id="propertyType">
+                                    <option value="null">Select property type</option>
+                                    <option value="vila">Villa</option>
+                                    <option value="apartment">Apartment</option>
+                                    <option value="home">Home</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <select class="form-select border-0 py-3">
-                                    <option selected>Location</option>
-                                    <option value="1">Location 1</option>
-                                    <option value="2">Location 2</option>
-                                    <option value="3">Location 3</option>
+                                <select class="form-select border-0 py-3" id="state">
+                                    <option value="null">Search by location</option>
+                                    <?php
+                                        $states = $ctrl->select_all_states();
+                                        foreach($states as $state):
+                                    ?>
+                                        <option value="<?= $state['state']?>"><?= $state['state']?></option>
+                                    <?php
+                                        endforeach;
+                                    ?>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-dark border-0 w-100 py-3">Search</button>
+                        <button class="btn btn-dark border-0 w-100 py-3" id="search">Search</button>
                     </div>
                 </div>
             </div>
@@ -345,9 +349,10 @@ $properties = $ctrl->fetchProperties($limit, $offset);
                                     </div>
                                 </div>
                             </div> -->
-                            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                                <a class="btn btn-primary py-3 px-5" href="" id="load-more">Browse More Property</a>
-                            </div>
+                        </div>
+                        <br><br>
+                        <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
+                            <button class="btn btn-primary py-3 px-5" id="load-more">Browse More Property</button>
                         </div>
                     </div>
                     <div id="tab-2" class="tab-pane fade show p-0">
@@ -720,24 +725,155 @@ $properties = $ctrl->fetchProperties($limit, $offset);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            let offset = <?php echo $offset + $limit; ?>;
-            const limit = <?php echo $limit; ?>;
+            
 
-            $('#load-more').on('click', function () {
-                $.ajax({
-                    url: 'property-list.php',
-                    type: 'GET',
-                    data: { offset: offset },
-                    success: function (response) {
-                        const newProperties = $(response).find('#property-list').html();
-                        $('#property-list').append(newProperties);
-                        offset += limit;
-                    },
-                    error: function () {
-                        alert('Failed to load more properties. Please try again later.');
+            const searchButton = document.querySelector('#search');
+    const propertyListings = document.getElementById('property-listings');
+
+    // Ensure elements exist before adding event listeners
+    if (searchButton && propertyListings) {
+        searchButton.addEventListener('click', function () {
+            // Get the search input values
+            const keyword = document.querySelector('#keyword').value;
+            const propertyType = document.querySelector('#propertyType').value;
+            const location = document.querySelector('#state').value;
+
+            // Clear previous results
+            propertyListings.innerHTML = '<p>Loading...</p>';
+            console.log(JSON.stringify({ keyword, propertyType, location }));
+            
+            // Fetch properties dynamically
+            fetch('fetchproduct.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ keyword, propertyType, location }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
+                    return response.json();
+                })
+                .then(properties => {
+                    propertyListings.innerHTML = ''; // Clear the loading text
+                    if (Array.isArray(properties) && properties.length > 0) {
+                        properties.forEach(property => {
+                            // Create property HTML dynamically
+                            const propertyHTML = `
+                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                                    <div class="property-item rounded overflow-hidden">
+                                        <div id="carousel-${property.id}" class="carousel slide position-relative" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                ${property.images && Array.isArray(property.images)
+                                                    ? property.images.map((img, index) => `
+                                                        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                                            <img class="d-block w-100 img-fluid" src="data:image/jpeg;base64,${img}" alt="${property.name}">
+                                                        </div>`).join('')
+                                                    : '<div class="carousel-item active"><img class="d-block w-100 img-fluid" src="default.jpg" alt="Default Image"></div>'}
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${property.id}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-${property.id}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                            <!-- Transaction Type and Property Type Tags -->
+                                            <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">For ${property.transaction_type}</div>
+                                            <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3"><a class="d-block h5 mb-2" href="cart.php?id=<?= $property['id']?>"><?=$property['prop_type']?></a></div>
+                                        </div>
+                                        <!-- Property Details -->
+                                        <div class="p-4 pb-0">
+                                            <h5 class="text-primary mb-3"><a class="d-block h5 mb-2" href="cart.php?id=${property.id}">$${property.asking_price}</a></h5>
+                                            <a class="d-block h5 mb-2" href="cart.php?id=${property.id}">${property.name}</a>
+                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>${property.state}</p>
+                                        </div>
+                                        <!-- Additional Info -->
+                                        <div class="d-flex border-top">
+                                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-ruler-combined text-primary me-2"></i>${property.space} sqft</small>
+                                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-bed text-primary me-2"></i>${property.bedroom} Bed</small>
+                                            <small class="flex-fill text-center py-2"><i class="fa fa-bath text-primary me-2"></i>${property.bathroom} Bath</small>
+                                        </div>
+                                    </div>
+                                    
+                                </div>`;
+                            propertyListings.insertAdjacentHTML('beforeend', propertyHTML);
+                        });
+                    } else {
+                        propertyListings.innerHTML = '<p>No properties found matching your criteria.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    propertyListings.innerHTML = '<p>An error occurred while fetching properties. Please try again later.</p>';
                 });
+        });
+    } else {
+        console.error('Search button or property listings container not found.');
+    }
+    let offset = <?php echo $offset + $limit; ?>;
+    const limit = <?php echo $limit; ?>;
+            document.getElementById("load-more").addEventListener("click", function () {
+                
+
+                // AJAX Request
+                fetch("Controller/requestHandler.php?offset=" + offset + "&limit=" + limit)
+                    .then(response => response.json())
+                    .then(data => {
+                        const propertyListings = document.getElementById('property-listings');
+                        offset += limit
+                        console.log(offset);
+                        
+                        data.forEach(property => {
+                            let propertyItem  = `
+                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                                    <div class="property-item rounded overflow-hidden">
+                                        <div id="carousel-${property.id}" class="carousel slide position-relative" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                ${property.images && Array.isArray(property.images)
+                                                    ? property.images.map((img, index) => `
+                                                        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                                            <img class="d-block w-100 img-fluid" src="data:image/jpeg;base64,${img}" alt="${property.name}">
+                                                        </div>`).join('')
+                                                    : '<div class="carousel-item active"><img class="d-block w-100 img-fluid" src="default.jpg" alt="Default Image"></div>'}
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${property.id}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-${property.id}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                            <!-- Transaction Type and Property Type Tags -->
+                                            <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">For ${property.transaction_type}</div>
+                                            <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3"><a class="d-block h5 mb-2" href="cart.php?id=<?= $property['id']?>"><?=$property['prop_type']?></a></div>
+                                        </div>
+                                        <!-- Property Details -->
+                                        <div class="p-4 pb-0">
+                                            <h5 class="text-primary mb-3"><a class="d-block h5 mb-2" href="cart.php?id=${property.id}">$${property.asking_price}</a></h5>
+                                            <a class="d-block h5 mb-2" href="cart.php?id=${property.id}">${property.name}</a>
+                                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i>${property.state}</p>
+                                        </div>
+                                        <!-- Additional Info -->
+                                        <div class="d-flex border-top">
+                                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-ruler-combined text-primary me-2"></i>${property.space} sqft</small>
+                                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-bed text-primary me-2"></i>${property.bedroom} Bed</small>
+                                            <small class="flex-fill text-center py-2"><i class="fa fa-bath text-primary me-2"></i>${property.bathroom} Bath</small>
+                                        </div>
+                                    </div>
+                                    
+                                </div>`;
+                                // propertyListings.appendChild(propertyItem);
+                            propertyListings.insertAdjacentHTML('beforeend', propertyItem);
+                        });
+                    })
+                    .catch(error => console.error("Error fetching properties:", error));
             });
+
         });
     </script>
 </body>

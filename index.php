@@ -134,7 +134,8 @@
                                 <input type="text" class="form-control border-0 py-3" placeholder="Search Keyword" id="keyword">
                             </div>
                             <div class="col-md-4">
-                                <select class="form-select border-0 py-3" id="propertType">
+                                <select class="form-select border-0 py-3" id="propertyType">
+                                    <option value="null">Select property type</option>
                                     <option value="vila">Villa</option>
                                     <option value="apartment">Apartment</option>
                                     <option value="home">Home</option>
@@ -142,6 +143,7 @@
                             </div>
                             <div class="col-md-4">
                                 <select class="form-select border-0 py-3" id="state">
+                                    <option value="null">Search by location</option>
                                     <?php
                                         $states = $ctrl->select_all_states();
                                         foreach($states as $state):
@@ -374,10 +376,11 @@
                         <?php
                             endforeach;
                         ?>
-                            <div class="col-12 text-center">
+                            
+                        </div>
+                        <div class="col-12 text-center">
                                 <a class="btn btn-primary py-3 px-5" href="">Browse More Property</a>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -642,13 +645,14 @@
     if (searchButton && propertyListings) {
         searchButton.addEventListener('click', function () {
             // Get the search input values
-            const keyword = document.querySelector('keyword')?.value.toLowerCase() || '';
-            const propertyType = document.querySelector('propertType')?.value || '';
-            const location = document.querySelector('state')?.value || '';
+            const keyword = document.querySelector('#keyword').value;
+            const propertyType = document.querySelector('#propertyType').value;
+            const location = document.querySelector('#state').value;
 
             // Clear previous results
             propertyListings.innerHTML = '<p>Loading...</p>';
-
+            console.log(JSON.stringify({ keyword, propertyType, location }));
+            
             // Fetch properties dynamically
             fetch('fetchproduct.php', {
                 method: 'POST',
@@ -688,13 +692,24 @@
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Next</span>
                                             </button>
+                                            <!-- Transaction Type and Property Type Tags -->
+                                            <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">For ${property.transaction_type}</div>
+                                            <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3"><a class="d-block h5 mb-2" href="cart.php?id=<?= $property['id']?>"><?=$property['prop_type']?></a></div>
                                         </div>
+                                        <!-- Property Details -->
                                         <div class="p-4 pb-0">
-                                            <h5 class="text-primary mb-3">$${property.asking_price}</h5>
-                                            <p>${property.name}</p>
+                                            <h5 class="text-primary mb-3"><a class="d-block h5 mb-2" href="cart.php?id=${property.id}">$${property.asking_price}</a></h5>
+                                            <a class="d-block h5 mb-2" href="cart.php?id=${property.id}">${property.name}</a>
                                             <p><i class="fa fa-map-marker-alt text-primary me-2"></i>${property.state}</p>
                                         </div>
+                                        <!-- Additional Info -->
+                                        <div class="d-flex border-top">
+                                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-ruler-combined text-primary me-2"></i>${property.space} sqft</small>
+                                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-bed text-primary me-2"></i>${property.bedroom} Bed</small>
+                                            <small class="flex-fill text-center py-2"><i class="fa fa-bath text-primary me-2"></i>${property.bathroom} Bath</small>
+                                        </div>
                                     </div>
+                                    
                                 </div>`;
                             propertyListings.insertAdjacentHTML('beforeend', propertyHTML);
                         });

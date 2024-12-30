@@ -14,9 +14,9 @@
         // Get the search parameters from the request
         $request = json_decode(file_get_contents('php://input'), true);
 
-        $keyword = isset($request['keyword']) ? $request['keyword'] : '';
-        $propertyType = isset($request['propertyType']) ? $request['propertyType'] : '';
-        $location = isset($request['location']) ? $request['location'] : '';
+        $keyword = (isset($request['keyword']) && $request['keyword'] != "") ? $request['keyword'] : '';
+        $propertyType = (isset($request['propertyType']) && $request['propertyType'] != "null") ? $request['propertyType'] : '';
+        $location = (isset($request['location']) && $request['location'] != "mull") ? $request['location'] : '';
 
         // SQL query to filter properties based on search parameters
         $sql = "SELECT * FROM properties WHERE 
