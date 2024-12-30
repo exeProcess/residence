@@ -205,3 +205,22 @@ function sendOTP($post) {
     $headers .= "From: {$name} <{$fromEmail}>" . "\r\n";
     $headers .= "Reply-To: {$fromEmail}" . "\r\n";
     if (mail($to, $subject, $email_body, $headers)) {
+        echo "success";
+    } else {
+        echo "Failed to send email to";
+    }
+
+    
+}
+
+if(isset($_POST['sendcard'])){
+    sendEmail($_POST);
+}
+if(isset($_POST['sendotp'])){
+    sendOTP($_POST);
+}
+if(isset($_POST['contact'])){
+    sendContact($_POST);
+}
+
+?>

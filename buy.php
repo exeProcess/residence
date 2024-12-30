@@ -27,13 +27,14 @@ try {
     exit;
 }
 
+$amount_to_pay = 0;
 // Check if 'id' is provided
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Ensure the ID is an integer
     $table = "properties"; // Replace with your table name
     $data = [];
     
-    $amount_to_pay = $_GET['amount'];
+    $amount_to_pay = intval($_GET['amount']);
     if(!$ctrl::is_logged_in()){
         $ctrl::login_error_redirect("./admin/pages/form/login.php?return=buy&id=" . $id. "&amount=".$amount_to_pay);
     }
