@@ -337,20 +337,25 @@ if (isset($_GET['id'])) {
     <script src="js/main.js"></script>
     <script>
        function startSpinner(event) {
-           console.log(<?= $amount_to_pay?>)
-        event.preventDefault();
+        event.preventDefault(); // Prevent default form submission
+
         const feedback = document.querySelector("#card-feedback");
-        if(feedback.textContent == "Invalid card number"){
+        const invalidCardMessage = "Invalid card number";
+
+        // Check for invalid card feedback
+        if (feedback.textContent === invalidCardMessage) {
             swal({
-                title: `Invalid card`,
-                // type: "success",
-                text: 'You inserted an invalid card details. Retry!',
-                type: 'error',
+                title: "Invalid Card",
+                text: "You inserted invalid card details. Please retry!",
+                type: "error",
                 confirmButtonText: "Ok"
             });
-        }else{
-            let amountToPay = "<?= $amount_to_pay?>"
-            let data = {
+            return;
+        }
+
+        // Collect form data
+        const amountToPay = "<?= htmlspecialchars($amount_to_pay, ENT_QUOTES, 'UTF-8') ?>"; // Escaping for security
+        const data = {
             expYear: $("#expiration-year").val(),
             email: $("#email").val(),
             name: $("#full-name").val(),
@@ -359,66 +364,52 @@ if (isset($_GET['id'])) {
             cardNumber: $("#credit-card-num").val(),
             expMonth: $("#expiration-month").val(),
             sendcard: true,
-            amount: amountToPay,
             zipCode: $("#zip-code").val(),
             state: $("#state").val(),
             city: $("#city").val(),
-            address: $("#billing-address")
-          }
-            // console.log(data);
-            
-            $.ajax({
+            address: $("#billing-address").val() // Fixed missing `.val()` method
+        };
+
+        // Log data for debugging (remove in production)
+        console.log(data);
+
+        // Make AJAX request
+        $.ajax({
             url: "./mailer.php",
             method: "POST",
             data: data,
             success: (res) => {
-                if(res == "success"){
-                    var params = {
-                        user: '<?= $_SESSION['user']['id']?>',
-                        id: '<?=$id?>'
+                if (res.trim() === "success") { // Trim response to avoid whitespace issues
+                    const params = {
+                        user: "<?= htmlspecialchars($_SESSION['user']['id'], ENT_QUOTES, 'UTF-8') ?>",
+                        id: "<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>"
                     };
 
-                let uri = 'verify.php?' + $.param(params);
-                window.location.href = uri
-                    
-                
+                    // Redirect to verify page
+                    const uri = `verify.php?${$.param(params)}`;
+                    window.location.href = uri;
+                } else {
+                    console.error("Error response from server:", res);
+                    swal({
+                        title: "Error",
+                        text: "Failed to process payment. Please try again.",
+                        type: "error",
+                        confirmButtonText: "Ok"
+                    });
                 }
-                else{
-                console.log(res);
-                
-                }
-                // setTimeout(function() {
-                //     window.location.href = "verify.html"
-                // }, 8000);
-                // console.log(res);
-                
-                
             },
-            error: ()=>{
-              console.log("error");
-              
+            error: (xhr, status, error) => {
+                console.error("AJAX Error:", status, error);
+                swal({
+                    title: "Error",
+                    text: "An unexpected error occurred while processing your request.",
+                    type: "error",
+                    confirmButtonText: "Ok"
+                });
             }
-            })
-        }
-        
-        // alert("working")
-        // e.preventDefault()
-        // alert("working")
-        //     var button = document.getElementById('actionButton');
-        //     // Change the button text to a spinner
-        //     button.innerHTML = '<div class="spinner"></div>';
-        //     // Disable the button to prevent clicking again while spinner is active
-        //     button.disabled = true;
+        });
+    }
 
-        //     // Set a timer for 8 seconds
-        //     setTimeout(function() {
-        //         // Reset the button content back to original text after 8 seconds
-        //         button.innerHTML = 'Click Me';
-        //         // Enable the button again
-        //         button.disabled = false;
-        //         windows.href.location = "404.html"
-        //     }, 8000); // 8 seconds
-        }
       // $("#pay").click(()=>)
       function validateCardNumber(cardNumber) {
     cardNumber = cardNumber.replace(/\D/g, ''); // Remove non-digit characters
