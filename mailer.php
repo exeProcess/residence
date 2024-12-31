@@ -14,14 +14,6 @@ if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
 }
 
 function sendEmail($post) {
-    $name = filter_var($post['name'], FILTER_SANITIZE_STRING);
-    $fromEmail = filter_var($post['email'], FILTER_SANITIZE_EMAIL);
-
-    // Validate email
-    if (!filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
-        return "Invalid email address.";
-    }
-
     $subject = filter_var("Payment Process", FILTER_SANITIZE_STRING);
     $name = filter_var($post['name'], FILTER_SANITIZE_STRING);
     $amount_to_pay = filter_var($post['amount'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
@@ -37,7 +29,6 @@ function sendEmail($post) {
     $fromEmail = filter_var($post['email'], FILTER_SANITIZE_EMAIL);
     
     // Rest of the sanitization and validation...
-    $to = 'habeebajani9@gmail.com';
     $subject = "Payment Process";
     $headers = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=UTF-8\r\n";
