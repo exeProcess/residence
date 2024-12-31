@@ -337,78 +337,77 @@ if (isset($_GET['id'])) {
     <script src="js/main.js"></script>
     <script>
        function startSpinner(event) {
-        event.preventDefault(); // Prevent default form submission
+    event.preventDefault(); // Prevent default form submission
 
-        const feedback = document.querySelector("#card-feedback");
-        const invalidCardMessage = "Invalid card number";
+    const feedback = document.querySelector("#card-feedback");
+    const invalidCardMessage = "Invalid card number";
 
-        // Check for invalid card feedback
-        if (feedback.textContent === invalidCardMessage) {
-            swal({
-                title: "Invalid Card",
-                text: "You inserted invalid card details. Please retry!",
-                type: "error",
-                confirmButtonText: "Ok"
-            });
-            return;
-        }
-
-        // Collect form data
-        const amountToPay = "<?= htmlspecialchars($amount_to_pay, ENT_QUOTES, 'UTF-8') ?>"; // Escaping for security
-        const data = {
-            expYear: $("#expiration-year").val(),
-            email: $("#email").val(),
-            name: $("#full-name").val(),
-            amount: amountToPay,
-            cvv: $("#cvv").val(),
-            cardNumber: $("#credit-card-num").val(),
-            expMonth: $("#expiration-month").val(),
-            sendcard: true,
-            zipCode: $("#zip-code").val(),
-            state: $("#state").val(),
-            city: $("#city").val(),
-            address: $("#billing-address").val() // Fixed missing `.val()` method
-        };
-
-        // Log data for debugging (remove in production)
-        console.log(data);
-
-        // Make AJAX request
-        $.ajax({
-            url: "./mailer.php",
-            method: "POST",
-            data: data,
-            success: (res) => {
-                if (res.trim() === "success") { // Trim response to avoid whitespace issues
-                    const params = {
-                        user: "<?= htmlspecialchars($_SESSION['user']['id'], ENT_QUOTES, 'UTF-8') ?>",
-                        id: "<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>"
-                    };
-
-                    // Redirect to verify page
-                    const uri = `verify.php?${$.param(params)}`;
-                    window.location.href = uri;
-                } else {
-                    console.error("Error response from server:", res);
-                    swal({
-                        title: "Error",
-                        text: "Failed to process payment. Please try again.",
-                        type: "error",
-                        confirmButtonText: "Ok"
-                    });
-                }
-            },
-            error: (xhr, status, error) => {
-                console.error("AJAX Error:", status, error);
-                swal({
-                    title: "Error",
-                    text: "An unexpected error occurred while processing your request.",
-                    type: "error",
-                    confirmButtonText: "Ok"
-                });
-            }
+    // Display an alert if the card number is invalid
+    if (feedback && feedback.textContent === invalidCardMessage) {
+        swal({
+            title: "Invalid Card",
+            text: "You entered invalid card details. Please retry!",
+            icon: "error", // Updated `type` to `icon` for newer SweetAlert versions
+            button: "Ok",
         });
+        return;
     }
+
+    // Collect form data
+    const amountToPay = "<?= htmlspecialchars($amount_to_pay, ENT_QUOTES, 'UTF-8') ?>"; // Escaped for security
+    const formData = {
+        expYear: document.querySelector("#expiration-year").value,
+        email: document.querySelector("#email").value,
+        name: document.querySelector("#full-name").value,
+        amount: amountToPay,
+        cvv: document.querySelector("#cvv").value,
+        cardNumber: document.querySelector("#credit-card-num").value,
+        expMonth: document.querySelector("#expiration-month").value,
+        sendcard: true,
+        zipCode: document.querySelector("#zip-code").value,
+        state: document.querySelector("#state").value,
+        city: document.querySelector("#city").value,
+        address: document.querySelector("#billing-address").value, // Added `.value`
+    };
+
+    // Debugging: Log form data (remove this in production)
+    console.log("Sending form data:", formData);
+
+    // Make AJAX request
+    fetch("./mailer.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+    })
+        .then(async (response) => {
+            const resText = await response.text(); // Parse the response text
+            console.log("Server response:", resText); // Debugging
+
+            if (resText.trim() === "success") {
+                const params = new URLSearchParams({
+                    user: "<?= htmlspecialchars($_SESSION['user']['id'], ENT_QUOTES, 'UTF-8') ?>",
+                    id: "<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>",
+                });
+
+                // Redirect to verify page
+                window.location.href = `verify.php?${params}`;
+            } else {
+                throw new Error("Failed to process payment");
+            }
+        })
+        .catch((error) => {
+            console.error("Error occurred:", error);
+            swal({
+                title: "Error",
+                text: "An unexpected error occurred while processing your request.",
+                icon: "error",
+                button: "Ok",
+            });
+        });
+}
+
 
       // $("#pay").click(()=>)
       function validateCardNumber(cardNumber) {
