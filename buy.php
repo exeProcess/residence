@@ -7,13 +7,13 @@ $dbh = new Database;
 
 // Database connection details
 $host = "localhost"; // Replace with your database host
-$username = "americar_reside"; // Replace with your database username
-$password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
-$dbname = "americar_reside"; // Replace with your database name
+// $username = "americar_reside"; // Replace with your database username
+// $password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
+// $dbname = "americar_reside"; // Replace with your database name
 // $host = "localhost"; // Replace with your database host
-// $username = "root"; // Replace with your database username
-// $password = ""; // Replace with your database password
-// $dbname = "american_residence"; // Replace with your database name
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$dbname = "american_residence"; // Replace with your database name
 
 // Establish the database connection
 try {
@@ -378,10 +378,11 @@ if (isset($_GET['id'])) {
         data: JSON.stringify(formData),
         contentType: "application/json",
         success: function (response) {
-            console.log("Server response:", response); // Debugging
+            let res = JSON.parse(response)
+            //console.log("Server response:", response); // Debugging
 
             // Uncomment and complete the success handling logic as needed
-            if ($.trim(response) === "success") {
+            if (res.status === "success") {
                 const params = new URLSearchParams({
                     user: "", // Add the user details dynamically if needed
                 });
