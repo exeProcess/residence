@@ -353,7 +353,7 @@
                 contact: true
             }
             $.ajax({
-                url : "./mailer.php",
+                url : "./contact-mailer.php",
                 method : "post",
                 data: data,
                 success: (res) => {

