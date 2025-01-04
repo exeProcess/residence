@@ -66,7 +66,7 @@ try {
     // Send the email
     $mail->send();
     http_response_code(200); // OK
-    echo json_encode(["success" => "OTP sent successfully"]);
+    echo json_encode(["status" => "success"]);
 } catch (Exception $e) {
     http_response_code(500); // Internal Server Error
     echo json_encode(["error" => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"]);
