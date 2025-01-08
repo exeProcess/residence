@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php'; // Ensure the PHPMailer package is loaded
 
-// Ensure the script processes only POST requests
+// Ensure the script processes only POST requests 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405); // Method Not Allowed
     echo json_encode(["error" => "Invalid request method"]);
@@ -54,7 +54,7 @@ try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com'; // Gmail's SMTP server
     $mail->SMTPAuth = true;
-    $mail->Username = 'americanresidence435@gmail.com'; // Your Gmail address
+    $mail->Username = 'habeebajani9@gmail.com'; // Your Gmail address
     $mail->Password = 'dtwh cnul jqfq uxol'; // App-specific password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Enable SSL encryption
     $mail->Port = 465; // Gmail SMTP port
