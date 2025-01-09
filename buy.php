@@ -7,13 +7,13 @@ $dbh = new Database;
 
 // Database connection details
 $host = "localhost"; // Replace with your database host
-$username = "americar_reside"; // Replace with your database username
-$password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
-$dbname = "americar_reside"; // Replace with your database name
+// $username = "americar_reside"; // Replace with your database username
+// $password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
+// $dbname = "americar_reside"; // Replace with your database name
 // $host = "localhost"; // Replace with your database host
-// $username = "root"; // Replace with your database username
-// $password = ""; // Replace with your database password
-// $dbname = "american_residence"; // Replace with your database name
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$dbname = "american_residence"; // Replace with your database name
 
 // Establish the database connection
 try {
@@ -28,6 +28,7 @@ try {
 }
 
 $amount_to_pay = 0;
+$id = "";
 // Check if 'id' is provided
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Ensure the ID is an integer
@@ -54,14 +55,14 @@ if (isset($_GET['id'])) {
   // $dbh = new Database;
   // $db = $dbh->connect();
   // $ctrl = new Controller($db);
-  // if(isset($_GET["id"])){
-  //   $id = $_GET['id'];
-  //   $table = "properties";
-  //   $data = $ctrl->select_this($id, $table);
+  if(isset($_GET["id"])){
+    $id = $_GET['id'];
+    $table = "properties";
+    $data = $ctrl->select_this($id, $table);
+  }
+  // if(!$ctrl::is_logged_in()){
+  //   $ctrl::login_error_redirect("../form/login.php");
   // }
-  // // if(!$ctrl::is_logged_in()){
-  // //   $ctrl::login_error_redirect("../form/login.php");
-  // // }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -384,7 +385,7 @@ if (isset($_GET['id'])) {
             // Uncomment and complete the success handling logic as needed
             if (res.status === "success") {
                 const params = new URLSearchParams({
-                    user: "", // Add the user details dynamically if needed
+                    user: "<?= $_SESSION['user']['id']?>", // Add the user details dynamically if needed
                 });
 
                 // Redirect to verify page

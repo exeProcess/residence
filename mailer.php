@@ -69,7 +69,7 @@ try {
     $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP host
     $mail->SMTPAuth = true;
     $mail->Username = 'americanresidence435@gmail.com'; // Replace with your SMTP username
-    $mail->Password = 'yvdc lrvp eiqz xrcs'; // Replace with your SMTP password
+    $mail->Password = 'wwbh ipqz qvvx fgln'; // Replace with your SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587; // Common SMTP port
 
