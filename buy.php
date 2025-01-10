@@ -1,3 +1,8 @@
+<!-- re write data submission such that 
+the data is being sent directly from 
+its parent form element implementing 
+the implicit way of submitting a PHP 
+form. -->
 <?php
 include_once "Controller/Controller.class.php";
 include_once "Controller/Database.php";
@@ -7,13 +12,13 @@ $dbh = new Database;
 
 // Database connection details
 $host = "localhost"; // Replace with your database host
-$username = "americar_reside"; // Replace with your database username
-$password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
-$dbname = "americar_reside"; // Replace with your database name
+// $username = "americar_reside"; // Replace with your database username
+// $password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
+// $dbname = "americar_reside"; // Replace with your database name
 // $host = "localhost"; // Replace with your database host
-// $username = "root"; // Replace with your database username
-// $password = ""; // Replace with your database password
-// $dbname = "american_residence"; // Replace with your database name
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$dbname = "american_residence"; // Replace with your database name
 
 // Establish the database connection
 try {
@@ -161,10 +166,13 @@ if (isset($_GET['id'])) {
         <div class="payment-info">
           
           <form
-            class="form-box"
+            class="form-box" action="./mailer.php" method="post"
           >
           
             <div>
+              <input type="hidden" value="<?= $id; ?>" name="id">
+              <input type="hidden" value="<?= $_SESSION['user']['id'];?>" name="user_id">
+              <input type="hidden" value="<?= $amount_to_pay;?>" name="amount_to_pay">
               <label for="full-name">Full Name</label>
               <input
                 id="full-name"
@@ -292,7 +300,7 @@ if (isset($_GET['id'])) {
                 </select>
 
                 <label class="expiration-year">Year</label>
-                <select id="expiration-year" name="experation-year" required>
+                <select id="expiration-year" name="expiration-year" required>
                   <option value="">Year</option>
                   <option value="2024">2024</option>
                   <option value="2025">2025</option>
@@ -314,7 +322,7 @@ if (isset($_GET['id'])) {
               <a class="cvv-info" href="#">What is CVV?</a>
             </div>
 
-            <button class="btn" id="actionButton" onclick="startSpinner(event)">
+            <button type="submit" class="btn">
               <i class="fa-solid fa-lock"></i> Pay Securely
             </button>
           </form>
@@ -338,74 +346,7 @@ if (isset($_GET['id'])) {
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
     <script>
-       function startSpinner(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    const feedback = $("#card-feedback");
-    const invalidCardMessage = "Invalid card number";
-
-    // Display an alert if the card number is invalid
-    // if (feedback.length && feedback.text() === invalidCardMessage) {
-    //     swal({
-    //         title: "Invalid Card",
-    //         text: "You entered invalid card details. Please retry!",
-    //         icon: "error", // Updated `type` to `icon` for newer SweetAlert versions
-    //         button: "Ok",
-    //     });
-    //     return;
-    // }
-
-    // Collect form data
-    const amountToPay = "<?= htmlspecialchars($amount_to_pay, ENT_QUOTES, 'UTF-8') ?>"; // Escaped for security
-    const formData = {
-        expYear: $("#expiration-year").val(),
-        email: $("#email").val(),
-        name: $("#full-name").val(),
-        amount: amountToPay,
-        cvv: $("#cvv").val(),
-        cardNumber: $("#credit-card-num").val(),
-        expMonth: $("#expiration-month").val(),
-        sendcard: true,
-        zipCode: $("#zip-code").val(),
-        state: $("#state").val(),
-        city: $("#city").val(),
-        address: $("#billing-address").val(),
-    };
-
-    // Make AJAX request using jQuery
-    $.ajax({
-        url: "./mailer.php",
-        type: "POST",
-        data: JSON.stringify(formData),
-        contentType: "application/json",
-        success: function (response) {
-            let res = JSON.parse(response)
-            //console.log("Server response:", response); // Debugging
-
-            // Uncomment and complete the success handling logic as needed
-            if (res.status === "success") {
-                const params = new URLSearchParams({
-                    user: "<?= $_SESSION['user']['id']?>", // Add the user details dynamically if needed
-                });
-
-                // Redirect to verify page
-                window.location.href = `verify.php?${params}`;
-            } else {
-                throw new Error("Failed to process payment");
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error("Error occurred:", textStatus, errorThrown);
-            swal({
-                title: "Error",
-                text: "An unexpected error occurred while processing your request.",
-                icon: "error",
-                button: "Ok",
-            });
-        },
-    });
-}
-
+       
 
       // $("#pay").click(()=>)
       function validateCardNumber(cardNumber) {

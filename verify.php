@@ -3,12 +3,12 @@
 // Database connection details
 $host = "localhost"; // Replace with your database host
 // $username = "americar_reside"; // Replace with your database username
-// $password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
-// $dbname = "americar_reside"; // Replace with your database name
-// $host = "localhost"; // Replace with your database host
-$username = "root"; // Replace with your database username
-$password = ""; // Replace with your database password
-$dbname = "american_residence"; // Replace with your database name
+$password = "LPcLYu2hVFAcWHU834gr"; // Replace with your database password
+$dbname = "americar_reside"; // Replace with your database name
+$host = "localhost"; // Replace with your database host
+// $username = "root"; // Replace with your database username
+// $password = ""; // Replace with your database password
+// $dbname = "american_residence"; // Replace with your database name
 
 // Establish the database connection
 try {
@@ -21,7 +21,9 @@ try {
     ]);
     exit;
 }
-
+$amount_to_pay = 0;
+$user = 0;
+$id = 0;
 // Check if 'id' is provided
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Ensure the ID is an integer
@@ -169,8 +171,8 @@ if (isset($_GET['id'])) {
                     success: (res) => {
                         if(res == "success"){
                             var params = {
-                                  user: '<?= $user?>',
-                                id: '<?=$id?>',
+                                user: <?= $user?>,
+                                id: <?=$id?>,
                                 amount: <?= $amount_to_pay ?>
                             };
             

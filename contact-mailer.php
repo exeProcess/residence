@@ -12,32 +12,25 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Get the raw POST data
-$requestBody = file_get_contents('php://input');
-$data = json_decode($requestBody, true);
 
-// Validate JSON decoding
-if (json_last_error() !== JSON_ERROR_NONE) {
-    http_response_code(400); // Bad Request
-    echo json_encode(["error" => "Invalid JSON data"]);
-    exit;
-}
+
+
 
 // Extract and validate required fields
 $requiredFields = ['name', 'email', 'subject', 'message'];
 foreach ($requiredFields as $field) {
-    if (empty($data[$field])) {
+    if (empty($_POST[$field])) {
         http_response_code(400); // Bad Request
         echo json_encode(["error" => "Missing field: $field"]);
         exit;
     }
 }
 
-// Sanitize input data
-$name = htmlspecialchars($data['name'], ENT_QUOTES, 'UTF-8');
-$email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
-$subject = htmlspecialchars($data['subject'], ENT_QUOTES, 'UTF-8');
-$message = htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8');
+// Sanitize input _$_POST
+$name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+$subject = htmlspecialchars($_POST['subject'], ENT_QUOTES, 'UTF-8');
+$message = htmlspecialchars($_POST['message'], ENT_QUOTES, 'UTF-8');
 $to = 'americanresidence435@gmail.com'; // Recipient email address
 
 // Prepare email content
@@ -55,7 +48,7 @@ try {
     $mail->Host = 'smtp.gmail.com'; // Gmail's SMTP server
     $mail->SMTPAuth = true;
     $mail->Username = 'habeebajani9@gmail.com'; // Your Gmail address
-    $mail->Password = 'dtwh cnul jqfq uxol'; // App-specific password
+    $mail->Password = 'kznc uzhe jtce ywhv'; // App-specific password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Enable SSL encryption
     $mail->Port = 465; // Gmail SMTP port
 
@@ -69,10 +62,11 @@ try {
     $mail->Subject = $subject;
     $mail->Body = $emailBody;
 
-    // Send the email
-    $mail->send();
-    http_response_code(200); // OK
-    echo json_encode(["success" => "Message sent successfully"]);
+    if($mail->send()){
+        echo "success";
+    }else{
+        echo "error";
+    }
 } catch (Exception $e) {
     http_response_code(500); // Internal Server Error
     echo json_encode(["error" => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"]);

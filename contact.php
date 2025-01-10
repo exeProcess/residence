@@ -23,6 +23,8 @@
     <!-- Libraries Stylesheet -->
     <link href="lib/animate/animate.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
+
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -339,6 +341,8 @@
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
+
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
@@ -357,8 +361,23 @@
                 method : "post",
                 data: data,
                 success: (res) => {
-                    let result = JSON.parse(res)
-                    console.log(result);
+                    if(res == "success"){
+                        swal({
+                            title: "Success",
+                            text: "Your message has been sent to contact team. We will get back to you in a bit!",
+                            icon: "success",
+                            button: "Ok",
+                        });
+                        
+                    }else{
+                        swal({
+                            title: "Error",
+                            text: "An unexpected error occurred while processing your request.",
+                            icon: "error",
+                            button: "Ok",
+                        });
+                        
+                    }
                     
                 }
             })
