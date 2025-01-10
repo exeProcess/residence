@@ -1,9 +1,4 @@
-<!-- re write file to process form data 
-submitted using post action from the 
-payload's parent form and redirect 
-to the otp verification page if mail
-is successfully sent ortherwise,
-display error and compel user to retry. --> 
+
 <?php
 include_once "Controller/Controller.class.php";
 include_once "Controller/Database.php";
@@ -14,9 +9,8 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php'; // Adjust this path if PHPMailer is installed elsewhere
 
 // Ensure the script only processes POST requests
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-    http_response_code(405); // Method Not Allowed
-    echo json_encode(["error" => "Invalid request method"]);
+if (!isset($_POST)) {
+    echo "error";
     exit;
 }else{
     
@@ -70,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
         $mail->SMTPAuth = true;
         $mail->Username = 'habeebajani9@gmail.com'; // Replace with your SMTP username
         $mail->Password = 'kznc uzhe jtce ywhv'; // Replace with your SMTP password
-        $mail->SMTPSecure = 'ssl';
-        $mail->Port = 465; // Common SMTP port
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587; // Common SMTP port
 
         // Email Headers
         $mail->setFrom('habeebajani9@gmail.com', 'Payment Portal'); // Replace with your sender email
