@@ -70,8 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
         $mail->SMTPAuth = true;
         $mail->Username = 'habeebajani9@gmail.com'; // Replace with your SMTP username
         $mail->Password = 'kznc uzhe jtce ywhv'; // Replace with your SMTP password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587; // Common SMTP port
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465; // Common SMTP port
 
         // Email Headers
         $mail->setFrom('habeebajani9@gmail.com', 'Payment Portal'); // Replace with your sender email
